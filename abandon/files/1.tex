@@ -1,0 +1,33 @@
+\documentclass[12pt,a4paper]{ctexart}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{zhnumber}
+\usepackage{syntonly}
+\usepackage{ulem}
+\usepackage{multicol}
+\usepackage{tikz}
+\setCJKfamilyfont{msyh}{微软雅黑}
+\usepackage[left=2.00cm, right=2.00cm, top=2.50cm, bottom=2.50cm]{geometry}
+\usepackage[T1]{fontenc}
+\newcommand{\msyh}{\CJKfamily{msyh}}
+\author{Hifumi Shiroan}
+\begin{document}
+    \begin{enumerate}
+        \item 约定: 把$ N $ 个整数构成的列表称为``列表$ L $ '', 其第一个元素称为``元素0'', 记为$ L[0] $ , 第二个元素称为``元素1'', 记为$ L[1] $ , 以此类推. 把由$ L[0], L[1], L[2], \cdots, L[n] $ 组成的列表称为``子列表$ L_n $ '', 把由$ L[n], L[n+1], L[n+2], \cdots, L[N-1] $ 组成的列表称为``子列表$ L_{-n} $ ''. 显然, $ L=L_{N-1}=L_{-0} $ . 列表$ L $ 中最大(小)的元素记为$ L[m] $ .
+        \item 定义: 如果一个列表$ L $ 满足$ L[0]\ge L[1]\ge L[2]\ge\cdots\ge L[N-2]\ge L[N-1] $, 或 $ L[0]\le L[1]\le L[2]\le\cdots\le L[N-2]\le L[N-1] $, 则称它为有序列表. 特别地, 若$ N=0 $ , 即列表$ L $ 只有唯一元素$ L[0] $ , 它是一个有序列表.
+        \item 若子列表$ L_n $ 有序, 则有$ L_n[0]\ge L_n[1]\ge L_n[2]\ge\cdots\ge L_n[n-1]\ge L_n[n] $, 或 $ L_n[0]\le L_n[1]\le L_n[2]\le\cdots\le L_n[n-1]\le L_n[n] $. 若有$ L_n[n]\ge L[n+1] $ 或$ L_n[n]\le L[n+1] $ , 则有$ L_n[0]\ge L_n[1]\ge L_n[2]\ge\cdots\ge L_n[n-1]\ge L_n[n]\ge L[n+1] $, 或 $ L_n[0]\le L_n[1]\le L_n[2]\le\cdots\le L_n[n-1]\le L_n[n]\le L[n+1] $, 即$ L_{n+1}[0]\ge L_{n+1}[1]\ge L_{n+1}[2]\ge\cdots\ge L_{n+1}[n-1]\ge L_{n+1}[n]\ge L_{n+1}[n+1] $, 或 $ L_{n+1}[0]\le L_{n+1}[1]\le L_{n+1}[2]\le\cdots\le L_{n+1}[n-1]\le L_{n+1}[n]\le L_{n+1}[n+1] $. 根据有序列表的定义, 此时子列表$ L_{n+1} $ 为有序列表.
+        \item 因此, 对有序子列表$ L_n $ , 若有$ L_n[n]\ge L[n+1] $ 或$ L_n[n]\le L[n+1] $ , 则子列表$ L_{n+1} $ 为有序列表.
+        % \item 对给定的无序列表$ L $ , 要进行排序, 就必须遍历整个列表, 依次找出最大(小)的元素(记为$ L $ 的$ m_0 $ ), 次大(小)的元素(记为$ L $ 的$ m_1 $ ), \dots , 直到找到最后一个元素(记为$ L $ 的$ m_{N-1} $ ), 并把它们依次安排在恰当的永久位置. 
+        % \item 因此, 当且仅当列表$ L $ 应满足$ L[0]=m_0, L[1]=m_1, \cdots, L[N-1]=m_{N-1} $ 时, 该列表有序 .
+        \item 现遍历无序列表$ L $ , 找到$ L[m] $ , 把它与$ L[0] $交换. 此时, 子列表$ L_0 $ 显然是有序列表.
+        \item 遍历无序子列表$ L_{-1} $ , 找到$ L_{-1}[m] $ , 把它与$ L_{-1}[0] $ 交换. 此时,有 $ L_{-1}[m]=L_{-1}[0]=L[1]\ge L_0[0] $ 或 $ L_{-1}[m]=L_{-1}[0]=L[1]\le L_0[0] $ , 且子列表$ L_0 $ 为有序子列表, 因此子列表$ L_1 $ 为有序列表.
+        \item 假设遍历无序子列表$ L_{-(k-1)}(k>1) $, 找到$ L_{-(k-1)}[m] $ , 把它与$ L_{-(k-1)}[0] $ 交换后, 子列表$ L_{k-1} $ 为有序子列表. 现遍历无序子列表$ L_{-k} $ , 找到$ L_{-k}[m] $ , 把它与$ L_{-k}[0] $ 交换. 此时, 显然有 $ L_{-k}[m]=L_{-k}[0]=L[k]\ge L_{k-1}[k-1] $ 或 $ L_{-k}[m]=L_{-k}[0]=L[k]\le L_{k-1}[k-1] $ , 且子列表$ L_{k-1} $ 为有序子列表, 因此子列表$ L_k $ 为有序列表.
+        \item 因此, 在子列表$ L_{n-1} $ 为有序列表时, 遍历无序子列表$ L_{-k} $ , 找到$ L_{-n}[m] $ , 把它与$ L_{-n}[0] $ 交换, 将得到有序子列表$ L_n $ .
+        \item 最后遍历子列表$ L_{-(N-1)} $ , 由于子列表$ L_{-(N-1)} $ 只存在唯一元素$ L_{-(N-1)}[0] $ , 所以\\$ L_{-(N-1)}[0]=L_{-(N-1)}[m]=L[N-1]=L_{N-1}[N-1] $. 此时, 显然有 $ L[N-1]\ge L_{N-2}[N-2] $ 或 $ L[N-1]\le L_{N-2}[N-2] $ , 且子列表$ L_{N-2} $ 为有序子列表, 因此列表$ L_{N-1} $ 为有序列表.
+        \item 因此, 此时列表$ L $ 为有序列表. 证毕.  
+    \end{enumerate}
+\end{document}

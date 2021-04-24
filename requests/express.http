@@ -1,0 +1,23 @@
+GET http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1
+Accept: application/json
+
+###
+GET http://s.cn.bing.net/th?id=OHR.CarrizoPlain_ZH-CN5933565493_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp
+Accept: image/jpeg
+
+###
+GET https://api.no0a.cn/api/bing/0
+Accept: application/json
+
+###
+POST http://localhost:3000/
+Accept: */*
+Content-Type: application/json
+
+{"id": 500, "name": "xxxx"}
+
+###
+GET http://localhost/cap
+Accept: image/svg+xml
+
+###

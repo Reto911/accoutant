@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="md5.min.js"></script>
+    <script src="axios.js"></script>
+  </head>
+  <body>
+    <img src="/cap" alt="caption" id="capimg">
+    <br>
+    <input type="text" id="cap">
+    <button onclick="val()">ok</button>
+  </body>
+  <script>
+    let ipt = document.getElementById("cap");
+    function val()
+    {
+      let code = document.cookie.split(';')[2].split('=')[1];
+      if (md5(ipt.value) === code)
+      {
+        axios.post('/cap', {code: ipt.value})
+        .then(res => {
+          document.write(res.data);
+        })
+      }
+      else {
+        window.alert("错误！")
+      }
+    }
+  </script>
+</html>

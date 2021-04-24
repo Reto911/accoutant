@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+<!--    <link href="../node_modules/materialize-css/dist/css/materialize.css" rel="stylesheet">-->
+  </head>
+
+  <body>
+<!--    <script src="node_modules/jquery/dist/jquery.js"></script>-->
+<!--    <script src="node_modules/materialize-css/dist/js/materialize.js"></script>-->
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <div id="app">
+      {{x}} * {{y}}
+    </div>
+  </body>
+  <script>
+
+    let vm = new Vue(
+      {
+        el: "#app",
+        data: {
+
+          y: window.screen.height
+        }
+      }
+    );
+  </script>
+</html>
