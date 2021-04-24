@@ -5,7 +5,7 @@ const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const hash = require('hash.js');
 
-const {dbPath, salt} = require('./config')
+const {dbPath, salt, port} = require('./config')
 const users = require('./scripts/users');
 const captcha = require('./scripts/captcha')
 
@@ -198,4 +198,4 @@ app.route("/utils/captcha")
         })
     })
 
-app.listen(80);
+app.listen(port);

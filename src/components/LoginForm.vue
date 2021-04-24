@@ -1,95 +1,95 @@
 <template>
-  <div class="row front">
-    <div class="col l4 m6 s12 offset-l4 offset-m3 z-depth-3 login">
-      <div class="row">
-        <div
-          v-if="tip"
-          id="pswError"
-          class="col l10 m10 s10 offset-l1 offset-m1 offset-s1"
-        >
-          {{ tip }}
+  <user-form
+      :error="false"
+      :error-tip="null">
+    <template #dialog>
+      <md-dialog-alert
+          :md-active.sync="error"
+          :md-content="tip"
+          md-confirm-text="好" />
+    </template>
+    <form>
+      <div class="md-layout md-alignment-center-center">
+        <div class="md-layout-item md-size-80" style="margin-top: 50px; margin-bottom: 50px">
+          <md-field
+              md-clearable
+              @md-clear="password=''"
+          >
+            <label>用户名</label>
+            <md-input
+                id="username"
+                v-model="username"
+                name="username"
+                required
+                type="text"
+            />
+          </md-field>
+        </div>
+        <div class="md-layout-item md-size-80" style="margin-bottom: 10px">
+          <md-field>
+            <label>密码</label>
+            <md-input
+                id="password"
+                v-model="password"
+                name="password"
+                required
+                type="password"
+            />
+          </md-field>
+        </div>
+        <div class="md-layout-item md-size-40">
+          <a
+              href="/users/reset"
+          >忘记密码...</a>
+        </div>
+        <div class="md-layout-item md-size-40" style="text-align: right">
+          <a href="/users/register">注册账号...</a>
+        </div>
+        <div class="md-layout-item md-size-80" style="margin-top: 30px; margin-bottom: 30px">
+          <md-button
+              id="login"
+              class="md-primary md-raised"
+              @click="submit"
+          >
+            登录 <md-icon style="color: white">
+            login
+          </md-icon>
+          </md-button>
         </div>
       </div>
-      <form>
-        <div
-          class="row"
-          style="margin-top: 20px; margin-bottom: 0;"
-        >
-          <div class="input-field col l10 m10 s10 offset-l1 offset-m1 offset-s1">
-            <input
-              id="username"
-              v-model="username"
-              class="validate"
-              name="username"
-              required
-              type="text"
-            >
-            <label for="username">用户名</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col l10 m10 s10 offset-l1 offset-m1 offset-s1">
-            <input
-              id="password"
-              v-model="password"
-              class="validate"
-              name="password"
-              required
-              type="password"
-            >
-            <label for="password">密码</label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col l10 offset-l1">
-            <button
-              id="login"
-              class="btn waves-effect waves-light white-text"
-              type="button"
-              @click="submit"
-            >
-              <span id="login-text">登录</span> <i class="material-icons">login</i>
-            </button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col l3 left">
-            <a
-              class="right"
-              href="/users/reset"
-            >忘记密码...</a>
-          </div>
-          <div class="col l3 right">
-            <a href="/users/register">注册账号...</a>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+    </form>
+  </user-form>
 </template>
 
 <script>
-import $ from 'jquery';
-import M from 'materialize-css'
+import userForm from "@/components/userForm";
 import axios from "axios";
 import hash from 'hash.js';
-// import VueRouter from 'vue-router'
+import UserForm from "@/components/userForm";
 
 export default {
   name: "LoginForm",
+  components: {UserForm},
+  comments:
+      {
+        userForm
+      },
   data() {
     return {
       username: "",
       password: "",
-      tip: ""
+      tip: "",
+      error: false
     }
   },
   methods: {
     submit: function () {
       if (this.username === "") {
+        this.error = true;
         this.tip = "请输入用户名!";
         return;
       } else if (this.password === "") {
+        this.error = true;
         this.tip = "请输入密码！";
         return;
       }
@@ -98,12 +98,14 @@ export default {
       axios.post('/users/login', userInf)
           .then(res => {
             if (res.status === 200 && res.data === "Password Error") {
+              this.error = true;
               this.tip = "用户名或密码错误!";
             } else if (res.status === 200 && res.data === "Logged in") {
               window.location.href = '/';
               this.tip = "";
             }
             else{
+              this.error = true;
               this.tip = "未知错误！";
             }
           })
@@ -114,47 +116,13 @@ export default {
 </script>
 
 <style scoped>
-@import '~materialize-css/dist/css/materialize.css';
 @import '../css/icon.css';
-
-.front {
-  z-index: 1;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  /*-webkit-filter: blur(2px);*/
-  /*-moz-filter: blur(2px);*/
-  /*-ms-filter: blur(2px);*/
-  /*-o-filter: blur(2px);*/
-  /*filter: blur(2px);*/
-}
-
-.login {
-  /*background-color: rgba(255, 255, 255, 0.7);*/
-  top: 50%;
-  content: '';
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-}
 
 #login {
   width: 100%;
+  color: white;
+  /*margin-top: 50px;*/
 }
 
-#pswError {
-  color: rgba(255, 0, 0, 0.7);
-  transform: translateY(120%);
-  font-size: 9pt;
-}
 
-#login-text {
-  transform: translateY(-10%);
-  display: inline-block;
-}
-
-/*i {*/
-/*  transform: translateY(10%);*/
-/*}*/
 </style>

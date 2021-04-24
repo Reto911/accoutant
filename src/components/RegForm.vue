@@ -17,10 +17,11 @@
       </div>
       <form>
         <div class="md-layout md-alignment-center-center">
-          <div class="md-layout-item md-size-80">
+          <div class="md-layout-item md-size-80" style="margin-top: 10px;">
             <md-field
               md-clearable
               :class="usedError"
+              @md-clear="password=null;confirmPwd=null;"
             >
               <label>用户名</label>
               <md-input
@@ -118,7 +119,7 @@
               @click="refreshCap"
             >
           </div>
-          <div class="md-layout-item md-size-80">
+          <div class="md-layout-item md-size-80" style="margin-bottom: 20px;margin-top: 10px;">
             <md-button
               id="register"
               class="md-primary md-raised"
