@@ -1,9 +1,8 @@
 <template>
   <user-form
-      :error="false"
-      :error-tip="null">
-
-  </user-form>
+    :error="false"
+    :error-tip="null"
+  />
 </template>
 
 <script>
@@ -11,10 +10,10 @@ import userForm from "@/components/userForm";
 import UserForm from "@/components/userForm";
 export default {
   name: "ResetForm",
-  components: {UserForm},
   comments:{
     userForm
-  }
+  },
+  components: {UserForm}
 }
 </script>
 

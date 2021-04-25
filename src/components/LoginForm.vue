@@ -1,59 +1,73 @@
 <template>
   <user-form
-      :error="false"
-      :error-tip="null">
+    :error="false"
+    :error-tip="null"
+  >
     <template #dialog>
       <md-dialog-alert
-          :md-active.sync="error"
-          :md-content="tip"
-          md-confirm-text="好" />
+        :md-active.sync="error"
+        :md-content="tip"
+        md-confirm-text="好"
+      />
     </template>
     <form>
       <div class="md-layout md-alignment-center-center">
-        <div class="md-layout-item md-size-80" style="margin-top: 50px; margin-bottom: 50px">
+        <div
+          class="md-layout-item md-size-80"
+          style="margin-top: 50px; margin-bottom: 50px"
+        >
           <md-field
-              md-clearable
-              @md-clear="password=''"
+            md-clearable
+            @md-clear="password=''"
           >
             <label>用户名</label>
             <md-input
-                id="username"
-                v-model="username"
-                name="username"
-                required
-                type="text"
+              id="username"
+              v-model="username"
+              name="username"
+              required
+              type="text"
             />
           </md-field>
         </div>
-        <div class="md-layout-item md-size-80" style="margin-bottom: 10px">
+        <div
+          class="md-layout-item md-size-80"
+          style="margin-bottom: 10px"
+        >
           <md-field>
             <label>密码</label>
             <md-input
-                id="password"
-                v-model="password"
-                name="password"
-                required
-                type="password"
+              id="password"
+              v-model="password"
+              name="password"
+              required
+              type="password"
             />
           </md-field>
         </div>
         <div class="md-layout-item md-size-40">
           <a
-              href="/users/reset"
+            href="/users/reset"
           >忘记密码...</a>
         </div>
-        <div class="md-layout-item md-size-40" style="text-align: right">
+        <div
+          class="md-layout-item md-size-40"
+          style="text-align: right"
+        >
           <a href="/users/register">注册账号...</a>
         </div>
-        <div class="md-layout-item md-size-80" style="margin-top: 30px; margin-bottom: 30px">
+        <div
+          class="md-layout-item md-size-80"
+          style="margin-top: 30px; margin-bottom: 30px"
+        >
           <md-button
-              id="login"
-              class="md-primary md-raised"
-              @click="submit"
+            id="login"
+            class="md-primary md-raised"
+            @click="submit"
           >
             登录 <md-icon style="color: white">
-            login
-          </md-icon>
+              login
+            </md-icon>
           </md-button>
         </div>
       </div>
@@ -69,11 +83,11 @@ import UserForm from "@/components/userForm";
 
 export default {
   name: "LoginForm",
-  components: {UserForm},
   comments:
       {
         userForm
       },
+  components: {UserForm},
   data() {
     return {
       username: "",

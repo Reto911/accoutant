@@ -1,7 +1,7 @@
 <template>
   <div id="resetPage">
     <bg-pic :img="img" />
-    <reset-form></reset-form>
+    <reset-form />
   </div>
 </template>
 

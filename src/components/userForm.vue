@@ -1,16 +1,16 @@
 <template>
   <div class="md-layout md-alignment-center-center front">
-    <slot name="dialog"></slot>
+    <slot name="dialog" />
     <div class="md-layout-item md-size-33 whiteForm">
       <div class="md-layout md-alignment-center-center">
         <div class="md-layout-item md-size-80">
           <span
-              v-if="error"
-              style="color: #FF5252"
+            v-if="error"
+            style="color: #FF5252"
           >{{ errorTip }}</span>
         </div>
       </div>
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
@@ -18,10 +18,10 @@
 <script>
 
 export default {
-  name: "userForm",
+  name: "UserForm",
   props: {
     error: Boolean,
-    errorTip: String
+    errorTip: String("")
   }
 }
 </script>

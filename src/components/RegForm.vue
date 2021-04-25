@@ -17,7 +17,10 @@
       </div>
       <form>
         <div class="md-layout md-alignment-center-center">
-          <div class="md-layout-item md-size-80" style="margin-top: 10px;">
+          <div
+            class="md-layout-item md-size-80"
+            style="margin-top: 10px;"
+          >
             <md-field
               md-clearable
               :class="usedError"
@@ -119,7 +122,10 @@
               @click="refreshCap"
             >
           </div>
-          <div class="md-layout-item md-size-80" style="margin-bottom: 20px;margin-top: 10px;">
+          <div
+            class="md-layout-item md-size-80"
+            style="margin-bottom: 20px;margin-top: 10px;"
+          >
             <md-button
               id="register"
               class="md-primary md-raised"
