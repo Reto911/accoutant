@@ -143,7 +143,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 const hash = require('hash.js')
 import axios from "axios";
 import format from 'date-fns/format'

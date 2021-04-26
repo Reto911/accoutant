@@ -21,3 +21,9 @@ GET http://localhost/cap
 Accept: image/svg+xml
 
 ###
+
+POST http://localhost:3000/users/inf
+Accept: application/json
+Content-Type: application/json
+
+{"username":  "root", "req":  ["username", "password", "ID"]}

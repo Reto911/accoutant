@@ -105,17 +105,18 @@ function register(dbPath, info, callback) {
 exports.register = register;
 
 // TODO: 密码修改
-function changePassword(dbPath, username, oPwd, nPwd, callback) {
+function changePassword(dbPath, username, nPwd, callback) {
     /* callback(err, this.changes) */
     let db = new sqlite3.Database(dbPath);
-    db.run("UPDATE users SET password=? WHERE username=? AND password=?", [nPwd, username, oPwd], (err) => {
-        callback(err, this.changes);
+    db.run("UPDATE users SET password=? WHERE username=?", [nPwd, username], (err) => {
+        callback(err);
     }).close();
 }
 
 exports.changePassword = changePassword;
 
 function getUser(dbPath, username, callback) {
+    /* callback(err, row) */
     let db = new sqlite3.Database(dbPath);
     db.get("SELECT * FROM users WHERE username=?", [username], (err, row) => callback(err, row))
         .close();

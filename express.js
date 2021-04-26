@@ -4,6 +4,7 @@ const url = require('url');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const hash = require('hash.js');
+const compression = require('compression')
 
 const {dbPath, salt, port} = require('./config')
 const users = require('./scripts/users');
@@ -40,6 +41,7 @@ app.get('/favicon.ico', (req, res) => {
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
+app.use(compression());
 // 静态资源
 app.use('/static', express.static('dist/'))
 
@@ -135,6 +137,7 @@ app.route("/users/register")
         })
     })
 
+// 用户名可用性
 app.route('/users/avail')
     .get((req, res) => {
         users.usernameCheck(dbPath, req.query.username, (used) => {
@@ -146,11 +149,87 @@ app.route('/users/avail')
         })
     })
 
+// 获取用户信息
+app.use("/users/inf", express.json());
+app.route("/users/inf")
+    .post((req, res) => {
+        let resJson = {};
+        users.getUser(dbPath, req.body.username, (err, row) => {
+            if (err) {
+                res.send('Error');
+            } else if (!row) {
+                res.status(404).send('Not-Found')
+            } else {
+                for (const queryItem of req.body.req) {
+                    resJson[queryItem] = row[queryItem]
+                }
+                res.json(resJson);
+            }
+        })
+    });
+
+// 验证用户信息, 若通过, 则返回一个时长为5min的key
+app.use("/users/verify", express.json());
+app.route("/users/verify")
+    .post((req, res) => {
+        if (!req.body.username) {
+            res.send("Empty-Username");
+            return;
+        }
+        users.getUser(dbPath, req.body.username, (err, row) => {
+            if (err) {
+                res.send('Error');
+            } else if (!row) {
+                res.status(404).send('Not-Found')
+            } else {  // 若读取到用户数据
+                let incorrect = [];
+                for (let prop in req.body) {
+                    if (req.body.hasOwnProperty(prop) && req.body[prop] !== row[prop]) {
+                        incorrect.push(prop);
+                    }
+                }
+                if (!incorrect.length) {
+                    users.keyGen(dbPath, req.body.username, (err, key) => {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            res.cookie('key', key, {
+                                maxAge: 300000,
+                                path: '/'
+                            });
+                        }
+                        res.json(incorrect);
+                    });
+                } else {
+                    res.json(incorrect);
+
+                }
+            }
+        })
+    })
+
 // 用户密码重置
-app.use("/users/register", express.json());
+app.use("/users/reset", express.json());
 app.route("/users/reset")
     .get((req, res) => {
         res.sendFile(__dirname + '/dist' + '/reset.html')
+    })
+    .post((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.send("Failed");
+                console.log("1");
+                console.log(err);
+            } else {
+                users.changePassword(dbPath, username, req.body.password, (err) => {
+                    if (err) {
+                        res.send("Failed");
+                    } else {
+                        res.send("Succeed");
+                    }
+                })
+            }
+        })
     })
 
 // 背景图片缓存
