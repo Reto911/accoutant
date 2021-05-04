@@ -38,6 +38,7 @@
                     name="username"
                     required
                     type="text"
+                    @keyup.enter="verifyUsername"
                   />
                   <span class="md-error">{{ firstError }}</span>
                 </md-field>

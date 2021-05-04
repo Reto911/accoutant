@@ -277,4 +277,9 @@ app.route("/utils/captcha")
         })
     })
 
+app.route('/debug')
+    .get((req, res) => {
+        res.sendFile(__dirname + '/dist' + '/index.html')
+    })
+
 app.listen(port);
