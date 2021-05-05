@@ -1,21 +1,15 @@
 <template>
   <div>
-    <md-datepicker
-      v-model="birthday"
-      md-immediately
-    >
-      <label>生日</label>
-    </md-datepicker>
+    <title-bar username="SSSS" />
   </div>
 </template>
 
 <script>
+import titleBar from "@/components/main/titleBar";
 export default {
   name: "Index",
-  data() {
-    return{
-      birthday:null
-    }
+  components: {
+    titleBar
   }
 }
 </script>

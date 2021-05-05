@@ -2,9 +2,9 @@ import Vue from 'vue'
 import App from './Index.vue'
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.min.css';
-// import 'vue-material/dist/theme/default.css';
-import '@/css/theme.scss';
-
+import 'vue-material/dist/theme/default.css';
+// import '@/css/theme.scss';
+import '../../css/icon.css'
 Vue.use(VueMaterial);
 
 Vue.material.locale.dateFormat = "yyyy-MM-dd";
