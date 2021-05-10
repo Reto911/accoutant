@@ -10,7 +10,7 @@ function init(dbPath, username, force, callback) {
             if (!row) {
                 db.run(`
                 CREATE TABLE ${username} (
-                id INT PRIMARY KEY NOT NULL,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 date TEXT NOT NULL,
                 usage TEXT NOT NULL,
                 balance REAL NOT NULL,
@@ -22,7 +22,7 @@ function init(dbPath, username, force, callback) {
             } else if (row && force) {
                 db.exec(`DROP TABLE ${username};` + `
                 CREATE TABLE ${username} (
-                id INT PRIMARY KEY NOT NULL,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 date TEXT NOT NULL,
                 usage TEXT NOT NULL,
                 balance REAL NOT NULL,
@@ -39,19 +39,52 @@ function init(dbPath, username, force, callback) {
 
 exports.init = init;
 
-// TODO: 读用户记录
+// 读用户记录
 function read(dbPath, username, callback) {
     /* callback(err, rows) */
     let db = new sqlite3.Database(dbPath);
-    db.all("SELECT * FROM ?", [username], (err, rows) => {
+    db.all(`SELECT * FROM ${username}`, [], (err, rows) => {
         callback(err, rows)
     }).close();
 }
 
 exports.read = read;
 
-// TODO: 写用户记录
+// 写用户记录
+function insert(dbPath, username, data, callback){
+    /* 写入记录
+    * callback(err) */
+    let {date, usage, balance, desc} = data;
+    let db = new sqlite3.Database(dbPath);
+    db.run(`
+        INSERT INTO ${username} (date, usage, balance, desc)
+        VALUES (?, ?, ?, ?)
+    `, [date, usage, balance, desc], (err) => {callback(err)}).close();
+}
 
-// TODO: 改用户记录
+exports.insert = insert;
 
-// TODO: 删用户记录
+// 改用户记录
+function update(dbPath, username, data, callback){
+    /* 修改用户记录
+    * callback(err) */
+    let {id, date, usage, balance, desc} = data;
+    let db = new sqlite3.Database(dbPath);
+    db.run(`
+        UPDATE ${username}
+        SET date=?2, usage=?3, balance=?4, desc=?5
+        WHERE id=?1
+     `, [id, date, usage, balance, desc], (err) => {callback(err)}).close();
+}
+
+exports.update = update;
+
+// 删用户记录
+function del(dbPath, username, id, callback){
+    let db = new sqlite3.Database(dbPath);
+    db.run(`
+        DELETE FROM ${username} WHERE id=?
+    `, [id], (err) => {callback(err)}).close();
+}
+
+exports.del = del;

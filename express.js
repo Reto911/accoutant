@@ -52,7 +52,7 @@ app.route('/')
                 }
                 console.log(username + "'ve logged in!");
                 db.init(dbPath, username, false, err => {
-                    if(err) console.log(err);
+                    if(err && err !== 'Existed') console.log(err);
                 })
                 res.type("text/html").send("Welcome, " + username + '.');
             })
@@ -67,11 +67,74 @@ app.route('/')
 
 // TODO: 数据库读写模块根
 app.use('/db',express.json());
-// TODO: 数据库查询
+// 数据库查询
 app.route('/db/select')
     .get((req, res) => {
-
-    })
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.read(dbPath, username, (err, rows) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).json(rows);
+            })
+        })
+    });
+// 数据库写入
+app.route('/db/insert')
+    .post((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.insert(dbPath, username, req.body, (err) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).end();
+            })
+        })
+    });
+// 数据库修改
+app.route('/db/update')
+    .post((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.update(dbPath, username, req.body, (err) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).end();
+            })
+        })
+    });
+// 数据库删除
+app.route('/db/delete')
+    .post((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.del(dbPath, username, req.body.id, (err) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).end();
+            })
+        })
+    });
 
 // 用户模块根
 app.route('/users')
@@ -162,7 +225,7 @@ app.route('/users/logout')
         let key = req.cookies.key;
         users.keyDisable(dbPath, key, (err) => {if(err) console.error(err)});
         res.cookie('key', null, {maxAge: -1});
-        res.status(303).location('/users/login');
+        res.status(303).location('/users/login').end();
     })
 
 // 获取用户信息

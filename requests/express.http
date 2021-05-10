@@ -1,24 +1,27 @@
-GET http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1
-Accept: application/json
-
-###
-GET http://s.cn.bing.net/th?id=OHR.CarrizoPlain_ZH-CN5933565493_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp
-Accept: image/jpeg
-
-###
-GET https://api.no0a.cn/api/bing/0
-Accept: application/json
-
-###
-POST http://localhost:3000/
-Accept: */*
+POST http://localhost:3000/db/delete
 Content-Type: application/json
 
-{"id": 500, "name": "xxxx"}
+{
+  "id": 2
+}
 
 ###
-GET http://localhost/cap
-Accept: image/svg+xml
+
+###
+GET http://localhost:3000/db/select
+Accept: application/json
+
+
+
+###
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+  "username": "shiroan",
+  "password": "f6a3052392a62a763babb8a6389da547c25cc44e903b6f60924118f62d176f7f"
+}
+
 
 ###
 
@@ -27,3 +30,4 @@ Accept: application/json
 Content-Type: application/json
 
 {"username":  "root", "req":  ["username", "password", "ID"]}
+

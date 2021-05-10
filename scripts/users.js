@@ -115,7 +115,7 @@ exports.register = register;
 
 // 密码修改
 function changePassword(dbPath, username, nPwd, callback) {
-    /* callback(err, this.changes) */
+    /* callback(err) */
     let db = new sqlite3.Database(dbPath);
     db.run("UPDATE users SET password=? WHERE username=?", [nPwd, username], (err) => {
         callback(err);
@@ -125,7 +125,8 @@ function changePassword(dbPath, username, nPwd, callback) {
 exports.changePassword = changePassword;
 
 function getUser(dbPath, username, callback) {
-    /* callback(err, row) */
+    /* 获取用户信息
+    *  callback(err, row) */
     let db = new sqlite3.Database(dbPath);
     db.get("SELECT * FROM users WHERE username=?", [username], (err, row) => callback(err, row))
         .close();
