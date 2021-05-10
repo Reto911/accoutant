@@ -4,7 +4,7 @@ const hash = require('hash.js');
 
 // console.log(hash.sha256().update("root").digest("hex"));
 
-// TODO: 登录模块
+// 登录模块
 
 function login(dbPath, username, pwd_coded, callback) {
     /* 登录函数, 尝试登录指定账号, 然后执行回调函数.
@@ -29,7 +29,7 @@ function login(dbPath, username, pwd_coded, callback) {
 
 exports.login = login;
 
-// TODO: 密钥相关
+// 密钥相关
 
 function keyGen(dbPath, username, callback) {
     /* 生成密钥, 并写数据库 */
@@ -37,7 +37,7 @@ function keyGen(dbPath, username, callback) {
     const key = hash.sha256().update(username + now).digest('hex');
     let db = new sqlite3.Database(dbPath);
     db.serialize()
-        .run("UPDATE keys SET valuable=0 WHERE username=? AND valuable=1", [username])  // 保证只有一个密钥生效
+        .run("UPDATE keys SET valuable=0 WHERE username=? AND valuable=1 AND long_term=0", [username])  // 保证只有一个密钥生效
         .run("INSERT INTO keys (username, user_key, gen_time) VALUES (?, ?, ?)",
             [username, key, parseInt(now / 1000)],
             (err) => {
@@ -72,7 +72,16 @@ function keyClean(dbPath, callback) {
 
 exports.keyClean = keyClean;
 
-// TODO: 注册模块
+function keyDisable(dbPath, key, callback){
+    /* 使密钥失效, 只支持传入密钥
+    * callback(err) */
+    let db = new sqlite3.Database(dbPath);
+    db.run('UPDATE keys SET valuable=0 WHERE user_key=? AND valuable=1 AND long_term=0', [key], err => {callback(err)}).close();
+}
+
+exports.keyDisable = keyDisable;
+
+// 注册模块
 
 function usernameCheck(dbPath, username, callback) {
     /* 检查用户名是否可用 */
@@ -104,7 +113,7 @@ function register(dbPath, info, callback) {
 
 exports.register = register;
 
-// TODO: 密码修改
+// 密码修改
 function changePassword(dbPath, username, nPwd, callback) {
     /* callback(err, this.changes) */
     let db = new sqlite3.Database(dbPath);

@@ -10,7 +10,7 @@
             <md-icon>menu</md-icon>
           </md-button>
           <h1 class="md-title">
-            Accountant
+            {{ username }}
           </h1>
         </div>
         <div class="md-toolbar-section-end">
@@ -27,7 +27,10 @@
 export default {
   name: "TitleBar",
   props: {
-    username: String
+    username: {
+      type: String,
+      default: "Unknown"
+    }
   }
 }
 </script>

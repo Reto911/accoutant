@@ -9,7 +9,7 @@ const compression = require('compression')
 const {dbPath, salt, port} = require('./config')
 const users = require('./scripts/users');
 const captcha = require('./scripts/captcha')
-
+const db= require('./scripts/db')
 // 下载背景图, 预期转移到其他文件
 function dlFile(uri, filename, callback) {
     let stream = fs.createWriteStream(filename);
@@ -27,21 +27,13 @@ let app = express();
 
 // 图标
 app.get('/favicon.ico', (req, res) => {
-    fs.readFile('dist/favicon.ico', (err, data) => {
-        if (err) {
-            console.log(err);
-            res.status(404).end();
-        } else {
-            res.type("image/*").send(data);
-        }
-    });
+    res.sendFile(__dirname + "/dist/favicon.ico");
 });
 
-// TODO: 静态路径配置, 以及主页配置
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
-app.use(compression());
+// app.use(compression());
 // 静态资源
 app.use('/static', express.static('dist/'))
 
@@ -52,12 +44,16 @@ app.route('/')
             // console.log("no key");
             res.status(303).location('/users/login').end();
             // res.sendFile(__dirname + '/dist' + '/login.html');
-        } else {  // 如果存在密钥且密钥有效
+        } else {  // 如果存在密钥
             users.keyCheck(dbPath, req.cookies.key, (err, username) => {
-                if (!username || err) {
+                if (!username || err) {  // 密钥无效
                     res.status(303).location('/users/login').end();
+                    return;
                 }
                 console.log(username + "'ve logged in!");
+                db.init(dbPath, username, false, err => {
+                    if(err) console.log(err);
+                })
                 res.type("text/html").send("Welcome, " + username + '.');
             })
 
@@ -67,6 +63,14 @@ app.route('/')
     })
     .post((req, res) => {
         res.status(404).end();
+    });
+
+// TODO: 数据库读写模块根
+app.use('/db',express.json());
+// TODO: 数据库查询
+app.route('/db/select')
+    .get((req, res) => {
+
     })
 
 // 用户模块根
@@ -97,8 +101,11 @@ app.route('/users/login')
                 res.send("Password Error");
             } else {
                 users.keyGen(dbPath, username, (err, key) => {
+                    if (err) {
+                        res.status(404).end();
+                        return console.error(err);
+                    }
                     res.status(200).cookie('key', key, {
-                        path: '/'
                     })
                         .send("Logged in")
                         .end();
@@ -147,6 +154,15 @@ app.route('/users/avail')
                 res.send("true");
             }
         })
+    })
+
+// 登出
+app.route('/users/logout')
+    .get((req, res) => {
+        let key = req.cookies.key;
+        users.keyDisable(dbPath, key, (err) => {if(err) console.error(err)});
+        res.cookie('key', null, {maxAge: -1});
+        res.status(303).location('/users/login');
     })
 
 // 获取用户信息

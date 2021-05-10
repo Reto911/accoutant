@@ -14,7 +14,8 @@
 <!--    <script src="node_modules/materialize-css/dist/js/materialize.js"></script>-->
     <script src="node_modules/vue/dist/vue.js"></script>
     <div id="app">
-      {{x}} * {{y}}
+      <input type="text" v-model="a.x">
+      <input type="text" v-model="a.y">
     </div>
   </body>
   <script>
@@ -23,8 +24,10 @@
       {
         el: "#app",
         data: {
-
-          y: window.screen.height
+          a: {
+            x: 0,
+            y: 0
+          }
         }
       }
     );
