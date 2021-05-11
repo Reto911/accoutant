@@ -114,11 +114,13 @@ export default {
       this.$emit('clear');
     },
     submit() {
-      this.$emit('submit');
-      this.$emit('clear');
+      if (this.form.id && this.form.date && this.form.usage && this.form.balance) {
+        this.$emit('submit', this.form);
+        this.$emit('clear');
+      }
     },
     deleteItem() {
-      this.$emit('delete');
+      this.$emit('delete', this.form);
       this.$emit('clear');
     }
   }

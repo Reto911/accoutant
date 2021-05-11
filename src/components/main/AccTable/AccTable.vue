@@ -175,6 +175,9 @@ export default {
       return this.reversedData.slice(this.firstRow-1, this.lastRow);
     }
   },
+  mounted() {
+    this.$emit('refresh');
+  },
   methods: {
     pagination(e) {
       this.rows = e.rows;
@@ -182,6 +185,7 @@ export default {
     },
     refresh() {
       this.$emit('refresh');
+      this.currentPage = 0;
       this.rotate = true;
       setTimeout( () => {this.rotate = false;}, 500);
     }

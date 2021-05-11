@@ -1,8 +1,6 @@
-import Vue from 'vue'
-import App from './App.vue'
+let axios = require('axios');
 
-Vue.config.productionTip = false
-
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+axios.get('http://localhost:3000/users/name')
+    .then(res => {
+        console.log(res.data);
+    }).catch(err => console.log(err))

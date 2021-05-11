@@ -7,7 +7,6 @@
       alt=""
       height="100%"
       width="100%"
-      @click="ge"
     >
   </div>
 </template>
@@ -26,9 +25,7 @@ export default {
     };
   },
   methods: {
-    ge: function () {
-      console.log(this.img);
-    }
+
   }
 }
 </script>

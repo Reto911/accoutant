@@ -3,12 +3,12 @@
 module.exports = {
   publicPath: '/static/',
   pages: {
-    index: {
-      entry: 'src/pages/index/index.js',
-      template: 'public/index.html',
-      filename: 'index.html',
-      title: 'Index',
-      chunks: ['chunk-vendors', 'chunk-common', 'index']
+    main: {
+      entry: 'src/pages/main/main.js',
+      template: 'public/main.html',
+      filename: 'main.html',
+      title: 'Main',
+      chunks: ['chunk-vendors', 'chunk-common', 'main']
     },
     login: {
       entry: 'src/pages/login/login.js',

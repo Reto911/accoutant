@@ -4,7 +4,8 @@ import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
 // import '@/css/theme.scss';
-// TODO: 主组件js
+import '../../css/icon.css'
+
 Vue.use(VueMaterial);
 
 Vue.material.locale.dateFormat = "yyyy-MM-dd";

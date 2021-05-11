@@ -49,10 +49,14 @@ function keyGen(dbPath, username, callback) {
 
 exports.keyGen = keyGen;
 
+/* 校验密钥. 若通过, 则调用回调函数, 并传入用户名作为第二个实参. */
 function keyCheck(dbPath, key, callback) {
-    /* 校验密钥. 若通过, 则调用回调函数, 并传入用户名作为第二个实参. */
     let db = new sqlite3.Database(dbPath);
     db.get("SELECT username, valuable FROM keys WHERE user_key=?", [key], (err, row) => {
+        if (!row) {
+            callback(err, undefined);
+            return;
+        }
         if (row.valuable) {
             callback(err, row.username);
         } else {

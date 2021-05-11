@@ -54,7 +54,7 @@ app.route('/')
                 db.init(dbPath, username, false, err => {
                     if(err && err !== 'Existed') console.log(err);
                 })
-                res.type("text/html").send("Welcome, " + username + '.');
+                res.sendFile(__dirname + '/dist/main.html');
             })
 
             // res.sendFile(__dirname + '/dist' + '/index.html');
@@ -297,7 +297,6 @@ app.route("/users/reset")
         users.keyCheck(dbPath, req.cookies.key, (err, username) => {
             if (err || !username) {
                 res.send("Failed");
-                console.log("1");
                 console.log(err);
             } else {
                 users.changePassword(dbPath, username, req.body.password, (err) => {
@@ -308,6 +307,21 @@ app.route("/users/reset")
                     }
                 })
             }
+        })
+    })
+
+app.use("/users/name", express.json());
+app.route("/users/name")
+    .get((req, res) => {
+        let key = req.cookies.key;
+        users.keyCheck(dbPath, key, (err, username) => {
+            if (err || !username) {
+                res.send("Unknown");
+                if (err) console.error(err);
+            } else {
+                res.send(username);
+            }
+
         })
     })
 

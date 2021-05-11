@@ -16,7 +16,9 @@
         <div class="md-toolbar-section-end">
           <md-button>统计</md-button>
           <md-button>设置</md-button>
-          <md-button>退出</md-button>
+          <md-button @click="$emit('logout')">
+            退出
+          </md-button>
         </div>
       </div>
     </md-toolbar>
