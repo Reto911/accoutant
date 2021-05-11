@@ -36,7 +36,7 @@
         <div class="md-layout-item md-size-100">
           <md-field>
             <label>描述</label>
-            <md-input v-model="form.usage" />
+            <md-input v-model.trim="form.usage" />
           </md-field>
         </div>
         <div class="md-layout-item md-size-100">
@@ -52,7 +52,7 @@
           <md-field>
             <label>详情</label>
             <md-textarea
-              v-model="form.desc"
+              v-model.trim="form.desc"
               md-autogrow
             />
           </md-field>
@@ -116,12 +116,12 @@ export default {
     submit() {
       if (this.form.id && this.form.date && this.form.usage && this.form.balance) {
         this.$emit('submit', this.form);
-        this.$emit('clear');
+        // this.$emit('clear');
       }
     },
     deleteItem() {
       this.$emit('delete', this.form);
-      this.$emit('clear');
+      // this.$emit('clear');
     }
   }
 }

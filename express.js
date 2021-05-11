@@ -8,8 +8,9 @@ const compression = require('compression')
 
 const {dbPath, salt, port} = require('./config')
 const users = require('./scripts/users');
-const captcha = require('./scripts/captcha')
-const db= require('./scripts/db')
+const captcha = require('./scripts/captcha');
+const db = require('./scripts/db');
+const csv = require('./scripts/csv');
 // 下载背景图, 预期转移到其他文件
 function dlFile(uri, filename, callback) {
     let stream = fs.createWriteStream(filename);
@@ -65,7 +66,7 @@ app.route('/')
         res.status(404).end();
     });
 
-// TODO: 数据库读写模块根
+// 数据库读写模块根
 app.use('/db',express.json());
 // 数据库查询
 app.route('/db/select')
@@ -135,6 +136,26 @@ app.route('/db/delete')
             })
         })
     });
+// csv
+app.route('/csv')
+    .get((req, res) => {
+        let key = req.cookies.key;
+        users.keyCheck(dbPath, key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.read(dbPath, username, (err, rows) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                csv.toCSV(rows, (out) => {
+                    res.type('text/csv').attachment(username + '.csv').send(out);
+                })
+            })
+        })
+    })
 
 // 用户模块根
 app.route('/users')
@@ -346,7 +367,6 @@ app.route('/bgimg')
                     });
                 } catch (e) {
                     console.log(e);
-                    return;
                 }
             } else {
                 console.log(err);

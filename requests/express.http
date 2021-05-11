@@ -1,3 +1,7 @@
+GET http://localhost:3000/csv
+Content-Type: text/csv
+
+###
 POST http://localhost:3000/db/delete
 Content-Type: application/json
 

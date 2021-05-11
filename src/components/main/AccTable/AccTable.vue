@@ -1,7 +1,8 @@
 <template>
-  <md-card class="md-elevation-2">
+  <md-card class="md-elevation-2 full-v">
     <md-table
       v-model="paginated"
+      style="height: calc(100% - 76px);"
       @md-selected="$emit('selected', $event)"
     >
       <!--      标题栏-->
@@ -12,6 +13,9 @@
           </h1>
         </div>
         <div class="md-toolbar-section-end">
+          <md-button class="md-icon-button" href="/csv">
+            <md-icon>file_download</md-icon>
+          </md-button>
           <md-button
             class="md-icon-button"
             :class="{'rotate': rotate}"
@@ -96,6 +100,8 @@
     <md-divider />
     <!--      分页器-->
     <acc-table-pagination
+      ref="pagination"
+      style="height: 76px;"
       :total="total"
       :row-disabled="rowDisabled"
       @row="rows = $event"
@@ -116,7 +122,7 @@ const toLower = text => {
 const search = (items, term) => {
   if (term) {
     return items.filter(item => {
-      return toLower(item.usage).includes(toLower(term)) || toLower(item.desc).includes(toLower(term));
+      return toLower(item.usage).includes(toLower(term)) || (item.desc ? toLower(item.desc).includes(toLower(term)) : false);
     })
   }
 
@@ -151,13 +157,16 @@ export default {
     return {
       rows: 10,
       currentPage: 0,
-      searchKey: null,
+      searchKey: "",
       rotate: false
     }
   },
   computed: {
     total () {
       return this.data.length;
+    },
+    totalPages() {
+      return Math.ceil(this.total / this.rows);  // begins at 1
     },
     firstRow() {
       return this.rows * this.currentPage + 1;
@@ -173,6 +182,11 @@ export default {
     },
     paginated() {
       return this.reversedData.slice(this.firstRow-1, this.lastRow);
+    }
+  },
+  watch: {
+    totalPages (n) {
+      if (this.currentPage >= n) this.$refs.pagination.currentPage = n - 1 >= 0 ? n-1 : 0;
     }
   },
   mounted() {
@@ -208,5 +222,9 @@ export default {
   50%{transform:rotate(180deg);}
   75%{transform:rotate(270deg);}
   100%{transform:rotate(360deg);}
+}
+
+.full-v {
+  height: 100%;
 }
 </style>

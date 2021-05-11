@@ -1,10 +1,19 @@
 <template>
-  <div>
+  <div class="full-v">
     <title-bar
       :username="username"
       @logout="logout"
     />
-    <div class="md-layout">
+    <md-dialog-alert
+      :md-active.sync="serverError"
+      md-title="错误"
+      md-content="服务器错误，请稍后重试！"
+      md-confirm-text="好"
+    />
+    <div
+      class="md-layout"
+      style="height: calc(100% - 64px);"
+    >
       <div class="md-layout-item md-size-50">
         <acc-table
           :data="data"
@@ -20,8 +29,8 @@
           :form.sync="form"
           :new-item="newItem"
           @clear="clear"
-          @submit="submit"
           @delete="del"
+          @submit="submit"
         />
       </div>
     </div>
@@ -29,7 +38,6 @@
 </template>
 
 <script>
-// TODO: 主组件
 import titleBar from "@/components/main/titleBar";
 import AccTable from "@/components/main/AccTable/AccTable";
 import AccForm from "@/components/main/AccForm";
@@ -79,7 +87,7 @@ export default {
   methods: {
     logout() {  // 登出
       axios.get('/users/logout')
-          .then(res => {
+          .then(() => {
             window.location.href = '/'
           }).catch(err => {
         console.error(err)
@@ -98,34 +106,55 @@ export default {
             console.log("Server Error");
           })
     },
-    submit(e){  // 添加或修改数据
+    submit(e) {  // 添加或修改数据
       if (this.newItem) {
         axios.post('/db/insert', e)
-        .then(res => {
-          if (res.status === 404) {
-            this.serverError = true;
-          } else {
-            this.data.push(e);
-          }
-        }).catch(err => {console.error(err)});
+            .then(res => {
+              if (res.status === 404) {
+                this.serverError = true;
+              } else {
+                this.data.push(e);
+                this.clear();
+              }
+            }).catch(err => {
+          console.error(err)
+        });
       } else {
         axios.post('/db/update', e)
             .then(res => {
               if (res.status === 404) {
                 this.serverError = true;
               } else {
-                for (let i = min(e.id - 1, this.data.length-1); i >= 0; i--){
+                for (let i = min(e.id - 1, this.data.length - 1); i >= 0; i--) {
                   if (this.data[i].id === e.id) {
                     this.$set(this.data, i, e);
+                    this.clear();
                     break;
                   }
                 }
               }
-            }).catch(err => {console.error(err)});
+            }).catch(err => {
+          console.error(err)
+        });
       }
     },
-    del(){  // TODO: 删除数据
-
+    del(e) {
+      axios.post('/db/delete', {id: this.form.id})
+          .then(res => {
+            if (res.status === 404) {
+              this.serverError = true;
+            } else {
+              for (let i = min(e.id - 1, this.data.length - 1); i >= 0; i--) {
+                if (this.data[i].id === e.id) {
+                  this.data.splice(i, 1);
+                  this.clear();
+                  break;
+                }
+              }
+            }
+          }).catch(err => {
+        console.error(err)
+      });
     },
     clear() {  // 清除表单
       this.form = new Form(this.lastID + 1);
@@ -138,5 +167,7 @@ export default {
 </script>
 
 <style scoped>
-
+.full-v {
+  height: 100%;
+}
 </style>
