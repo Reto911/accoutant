@@ -13,7 +13,10 @@
           </h1>
         </div>
         <div class="md-toolbar-section-end">
-          <md-button class="md-icon-button" href="/csv">
+          <md-button
+            class="md-icon-button"
+            href="/csv"
+          >
             <md-icon>file_download</md-icon>
           </md-button>
           <md-button

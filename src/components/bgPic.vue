@@ -1,13 +1,14 @@
 <template>
   <div
     class="bgimg"
+    :style="bg"
   >
-    <img
-      :src="img"
-      alt=""
-      height="100%"
-      width="100%"
-    >
+  <!--    <img-->
+  <!--      :src="img"-->
+  <!--      alt=""-->
+  <!--      height="100%"-->
+  <!--      width="100%"-->
+  <!--    >-->
   </div>
 </template>
 
@@ -24,6 +25,13 @@ export default {
     return {
     };
   },
+  computed: {
+    bg() {
+      return {
+        backgroundImage: `url(${this.img})`
+      }
+    }
+  },
   methods: {
 
   }
@@ -37,5 +45,6 @@ export default {
   height: 100%;
   z-index: -1;
   position: absolute;
+  -webkit-transition: background 4s;
 }
 </style>

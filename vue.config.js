@@ -31,6 +31,13 @@ module.exports = {
       title: 'Reset',
       chunks: ['chunk-vendors', 'chunk-common', 'reset']
     },
+    debug: {
+      entry: 'src/pages/debug/debug.js',
+      template: 'public/debug.html',
+      filename: 'debug.html',
+      title: 'Debug',
+      chunks: ['chunk-vendors', 'chunk-common', 'debug']
+    },
   }
   // configureWebpack: {
   //   output: {

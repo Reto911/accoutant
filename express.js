@@ -392,7 +392,7 @@ app.route("/utils/captcha")
 
 app.route('/debug')
     .get((req, res) => {
-        res.sendFile(__dirname + '/dist' + '/index.html')
+        res.sendFile(__dirname + '/dist' + '/debug.html')
     })
 
 app.listen(port);
