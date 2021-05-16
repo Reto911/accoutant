@@ -29,27 +29,13 @@
 import AccTable from "@/components/main/AccTable/AccTable";
 import AccForm from "@/components/main/AccForm";
 import Form from "@/js/functions";
+import {mapState} from "vuex";
 
 export default {
   name: "Home",
   components: {
     AccTable,
     AccForm
-  },
-  props: {
-    username: {
-      type: String,
-      default: "Unknown",
-    },
-    data: {
-      type: Array,
-      default: () => [],
-      required: true
-    },
-    tableInitialized: {
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     return {
@@ -63,7 +49,12 @@ export default {
     },
     newItem() {
       return this.form.id > this.lastID || !this.form.id;
-    }
+    },
+    ...mapState([
+        'data',
+        'username',
+        'tableInitialized'
+    ])
   },
   watch: {
     data(n) {

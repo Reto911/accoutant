@@ -3,7 +3,6 @@
   <!-- TODO: 引入vuex? -->
   <div class="full-v">
     <title-bar
-      :username="username"
       @logout="logout"
     />
     <md-dialog-alert
@@ -24,8 +23,8 @@
 import titleBar from "@/components/main/titleBar";
 // import Home from "@/components/main/Home";
 import axios from "axios";
+import {mapActions, mapMutations} from "vuex";
 
-const min = (a, b) => (a < b) ? a : b;
 
 export default {
   name: "Main",
@@ -37,32 +36,15 @@ export default {
   },
   data() {
     return {
-      username: "",
-      data: [],
-      tableInitialized: false,
-      // form: new Form(),
       serverError: false
     }
   },
   computed: {},
   watch: {},
   mounted() {
-    axios.get('/users/name')
-        .then(res => {
-          this.username = res.data;
-          // this.$router.replace({
-          //   name: 'home',
-          //   params: {
-          //     username: this.username,
-          //     data: this.data,
-          //     tableInitialized: this.tableInitialized
-          //   }
-          // })
-        })
-        .catch(err => {
-          if (err) console.error(err);
-        });
+    this.$store.dispatch('getUsername');
     this.refresh();
+    this.$router.replace('/home');
   },
   methods: {
     logout() {  // 登出
@@ -74,17 +56,7 @@ export default {
       })
     },
     refresh() {  // 刷新表格
-      this.tableInitialized = false;
-      this.data = [];
-      axios.get('/db/select')
-          .then(res => {
-            this.data = res.data;
-            this.tableInitialized = true;
-          })
-          .catch(err => {
-            console.error(err);
-            console.log("Server Error");
-          })
+      this.$store.dispatch('refresh');
     },
     submit(e, newItem) {  // 添加或修改数据
       if (newItem) {
@@ -93,8 +65,7 @@ export default {
               if (res.status === 404) {
                 this.serverError = true;
               } else {
-                this.data.push(e);
-                // this.clear();
+                this.$store.commit('addItem', e);
               }
             }).catch(err => {
           console.error(err)
@@ -105,13 +76,7 @@ export default {
               if (res.status === 404) {
                 this.serverError = true;
               } else {
-                for (let i = min(e.id - 1, this.data.length - 1); i >= 0; i--) {
-                  if (this.data[i].id === e.id) {
-                    this.$set(this.data, i, e);
-                    // this.clear();
-                    break;
-                  }
-                }
+                this.$store.commit('setItem', e)
               }
             }).catch(err => {
           console.error(err)
@@ -124,13 +89,7 @@ export default {
             if (res.status === 404) {
               this.serverError = true;
             } else {
-              for (let i = min(e.id - 1, this.data.length - 1); i >= 0; i--) {
-                if (this.data[i].id === e.id) {
-                  this.data.splice(i, 1);
-                  // this.clear();
-                  break;
-                }
-              }
+              this.$store.commit('deleteItem', e.id);
             }
           }).catch(err => {
         console.error(err)

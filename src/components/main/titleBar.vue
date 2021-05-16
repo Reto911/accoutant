@@ -15,20 +15,16 @@
         </div>
         <div class="md-toolbar-section-end">
           <md-button
-            :class="{'md-accent': active === 0}"
-            :to="{name: 'home', params: {username: $root.username, data: $root.data, tableInitialized: $root.tableInitialized}}"
             @click="home"
           >
             主页
           </md-button>
           <md-button
-            :class="{'md-accent': active === 1}"
             @click="statistic"
           >
             统计
           </md-button>
           <md-button
-            :class="{'md-accent': active === 2}"
             @click="setting"
           >
             设置
@@ -43,19 +39,18 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
+
 export default {
   name: "TitleBar",
-  props: {
-    username: {
-      type: String,
-      default: "Unknown"
-    }
-  },
   data() {
     return {
         active: 0
     }
   },
+  computed: mapState([
+    'username'
+  ]),
   methods: {
     home() {
       if (this.active !== 0){
@@ -74,7 +69,7 @@ export default {
         this.$emit('setting');
       }
     }
-  }
+  },
 }
 </script>
 
