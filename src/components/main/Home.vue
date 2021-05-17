@@ -29,7 +29,7 @@
 import AccTable from "@/components/main/AccTable/AccTable";
 import AccForm from "@/components/main/AccForm";
 import Form from "@/js/functions";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "Home",
@@ -44,16 +44,14 @@ export default {
     }
   },
   computed: {
-    lastID() {
-      return this.data.length ? this.data[this.data.length - 1].id : 0;
-    },
     newItem() {
       return this.form.id > this.lastID || !this.form.id;
     },
     ...mapState([
-        'data',
-        'username',
-        'tableInitialized'
+      'data',
+      'username',
+      'tableInitialized',
+      'lastID'
     ])
   },
   watch: {
@@ -66,25 +64,44 @@ export default {
       }
     }
   },
+  mounted() {
+    this.clear();
+  },
   methods: {
     refresh() {
       this.$emit('refresh');
     },
     clear() {  // 清除表单
-      this.form = new Form();
+      this.getLastId().then(() => {
+        this.form = new Form(this.lastID + 1);
+      })
     },
     onSelect(e) {  // 选择
       if (e) Object.assign(this.form, e);
     },
     del(e) {
-      this.$emit('delete', e);
-      this.clear();
+      this.drop(e)
+          .then(() => {
+            this.clear();
+          })
+          .catch(() => {
+            this.$emit('server-err');
+          })
     },
-    submit(e){
-      this.$emit('submit', e, this.newItem);
-      this.clear();
-      this.refresh();
-    }
+    submit(e) {  // 异步提交, 若成功则清空表单, 否则抛出错误
+      this.update({item: e, newItem: this.newItem})
+          .then(() => {
+            this.clear();
+          })
+          .catch(() => {
+            this.$emit('server-err');
+          })
+    },
+    ...mapActions([
+      'update',
+      'drop',
+      'getLastId'
+    ])
   }
 }
 </script>

@@ -15,17 +15,17 @@
         </div>
         <div class="md-toolbar-section-end">
           <md-button
-            @click="home"
+            to="/home"
           >
             主页
           </md-button>
           <md-button
-            @click="statistic"
+            to="/statistic"
           >
             统计
           </md-button>
           <md-button
-            @click="setting"
+            to="/setting"
           >
             设置
           </md-button>
@@ -52,23 +52,6 @@ export default {
     'username'
   ]),
   methods: {
-    home() {
-      if (this.active !== 0){
-        this.active = 0;
-      }
-    },
-    statistic() {
-      if (this.active !== 1){
-        this.active = 1;
-        this.$emit('statistic');
-      }
-    },
-    setting() {
-      if (this.active !== 2){
-        this.active = 2;
-        this.$emit('setting');
-      }
-    }
   },
 }
 </script>
