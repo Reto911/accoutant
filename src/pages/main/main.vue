@@ -49,7 +49,8 @@ export default {
           .then(() => {
             window.location.href = '/'
           }).catch(err => {
-        console.error(err)
+        console.error(err);
+        this.serverError = true;
       })
     },
     refresh() {  // 刷新表格
