@@ -4,7 +4,7 @@ const request = require('request');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const hash = require('hash.js');
-// const compression = require('compression')
+const compression = require('compression')
 
 const {dbPath, salt, port} = require('./config')
 const users = require('./scripts/users');
@@ -34,7 +34,7 @@ app.get('/favicon.ico', (req, res) => {
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
-// app.use(compression());
+app.use(compression());
 // 静态资源
 app.use('/static', express.static('dist/'))
 

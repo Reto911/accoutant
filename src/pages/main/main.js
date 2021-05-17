@@ -96,8 +96,13 @@ let store = new Vuex.Store({
             return new Promise((resolve, reject) => {
                 axios.get('/db/id')
                     .then(res => {
-                        commit('setLastID', res.data.seq);
-                        resolve();
+                        if (!res.data){
+                            commit('setLastID', 0);
+                            resolve();
+                        } else {
+                            commit('setLastID', res.data.seq);
+                            resolve();
+                        }
                     })
                     .catch(err => {
                         if (err) {

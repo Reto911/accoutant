@@ -37,6 +37,7 @@
           <md-field>
             <label>描述</label>
             <md-input
+              ref="usage"
               v-model.trim="form.usage"
               required
             />

@@ -11,10 +11,12 @@
         :username="username"
         @refresh="refresh"
         @selected="onSelect"
+        @new="addNew"
       />
     </div>
     <div class="md-layout-item md-size-50">
       <acc-form
+        ref="form"
         :form.sync="form"
         :new-item="newItem"
         @clear="clear"
@@ -96,6 +98,10 @@ export default {
           .catch(() => {
             this.$emit('server-err');
           })
+    },
+    addNew() {
+      this.clear();
+      this.$refs.form.$refs.usage.$el.focus();
     },
     ...mapActions([
       'update',
