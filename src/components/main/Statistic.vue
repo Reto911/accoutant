@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- TODO: 统计图标 -->
+    <!-- TODO: 统计图表 -->
   </div>
 </template>
 
