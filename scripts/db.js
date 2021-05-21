@@ -88,3 +88,12 @@ function del(dbPath, username, id, callback){
 }
 
 exports.del = del;
+
+// 获取LastID
+function getLastId(dbPath, username, callback){
+    let db = new sqlite3.Database(dbPath);
+    db.get('SELECT seq FROM sqlite_sequence WHERE name=?', [username], (err, row) => {callback(err, row)})
+        .close();
+}
+
+exports.getLastId = getLastId;

@@ -13,7 +13,7 @@ function toCSV(data, callback){
         console.error(err.message);
     });
     stream.on("finish", () => {
-        let out = "id, date, usage, balance, desc\n";
+        let out = "id,date,usage,balance,desc\n";
         out += rows.join('');
         callback(out);
     });

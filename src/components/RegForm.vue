@@ -109,6 +109,7 @@
                 required
                 maxlength="4"
                 type="text"
+                @keyup.enter="submit"
               />
               <span class="md-error">验证码错误！</span>
             </md-field>

@@ -1,6 +1,6 @@
 const express = require('express');
 const request = require('request');
-const url = require('url');
+// const url = require('url');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const hash = require('hash.js');
@@ -34,7 +34,7 @@ app.get('/favicon.ico', (req, res) => {
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
-// app.use(compression());
+app.use(compression());
 // 静态资源
 app.use('/static', express.static('dist/'))
 
@@ -136,6 +136,23 @@ app.route('/db/delete')
             })
         })
     });
+// 获取LastID
+app.route('/db/id')
+    .get((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.getLastId(dbPath, username, (err, row) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.json(row)
+            })
+        })
+    })
 // csv
 app.route('/csv')
     .get((req, res) => {
@@ -178,7 +195,7 @@ app.route('/users/login')
             }
         });
     })
-    .post((req, res, next) => {
+    .post((req, res) => {
         let {username, password} = req.body;
         users.login(dbPath, username, password, (success) => {
             if (!success) {
@@ -348,7 +365,7 @@ app.route("/users/name")
 
 // 背景图片缓存
 app.route('/bgimg')
-    .get((req, res, next) => {
+    .get((req, res) => {
         res.type("text/plain")
         request("http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", (err, response, body) => {
             if (!err) {
@@ -395,4 +412,6 @@ app.route('/debug')
         res.sendFile(__dirname + '/dist' + '/debug.html')
     })
 
-app.listen(port);
+app.listen(port, () => {
+    console.log("The server has listened at http://localhost:"+port);
+});

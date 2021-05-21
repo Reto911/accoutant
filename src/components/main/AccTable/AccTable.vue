@@ -7,11 +7,7 @@
     >
       <!--      标题栏-->
       <md-table-toolbar>
-        <div class="md-toolbar-section-start">
-          <h1 class="md-title">
-            {{ username }}
-          </h1>
-        </div>
+        <div class="md-toolbar-section-start" />
         <div class="md-toolbar-section-end">
           <md-button
             class="md-icon-button"
@@ -48,7 +44,10 @@
         md-description="快来添加一条新的账目吧！"
         md-icon="note_add"
       >
-        <md-button class="md-primary md-raised">
+        <md-button
+          class="md-primary md-raised"
+          @click="$emit('new')"
+        >
           添加一条账目
         </md-button>
       </md-table-empty-state>

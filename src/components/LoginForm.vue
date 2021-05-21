@@ -42,6 +42,7 @@
               name="password"
               required
               type="password"
+              @keyup.enter="submit"
             />
           </md-field>
         </div>

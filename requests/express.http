@@ -1,5 +1,15 @@
-GET http://localhost:3000/csv
-Content-Type: text/csv
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{"code":"nhsk","username":"root","password":"72b289ec78e0a928c565480a435453e30acb92eddb3b78ff168b28737cf6a849","birthday":"2021-05-18","val_q":"II","val_a":"II"}
+
+###
+GET http://localhost:3000/db/id
+Accept: application/json
+
+###
+GET http://localhost:3000/users/register
+Content-Type: text/html
 
 ###
 POST http://localhost:3000/db/delete

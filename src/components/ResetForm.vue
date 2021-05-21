@@ -137,6 +137,7 @@
                     name="confirmPassword"
                     required
                     type="password"
+                    @keyup.enter="resetPwd"
                   />
                   <span class="md-error">两次输入不一致！</span>
                 </md-field>
