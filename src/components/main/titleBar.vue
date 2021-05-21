@@ -6,9 +6,6 @@
     >
       <div class="md-toolbar-row">
         <div class="md-toolbar-section-start">
-          <md-button class="md-icon-button md-primary">
-            <md-icon>menu</md-icon>
-          </md-button>
           <h1 class="md-title">
             {{ username }}
           </h1>
@@ -25,7 +22,7 @@
             统计
           </md-button>
           <md-button
-            to="/setting"
+            to="/settings"
           >
             设置
           </md-button>

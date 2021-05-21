@@ -11,6 +11,7 @@ import '../../css/icon.css'
 import VueRouter from "vue-router";
 import Home from "@/components/main/Home";
 import Statistic from "@/components/main/Statistic";
+import Settings from "@/components/main/Settings";
 
 
 Vue.use(VueMaterial);
@@ -84,19 +85,25 @@ let store = new Vuex.Store({
                 })
         },
         getUsername({commit}) {
-            axios.get('/users/name')
-                .then(res => {
-                    commit('setUsername', res.data);
-                })
-                .catch(err => {
-                    if (err) console.error(err);
-                });
+            return new Promise((resolve, reject) => {
+                axios.get('/users/name')
+                    .then(res => {
+                        commit('setUsername', res.data);
+                        resolve();
+                    })
+                    .catch(err => {
+                        if (err) {
+                            console.error(err);
+                            reject(err);
+                        }
+                    });
+            })
         },
         getLastId({commit}) {
             return new Promise((resolve, reject) => {
                 axios.get('/db/id')
                     .then(res => {
-                        if (!res.data){
+                        if (!res.data) {
                             commit('setLastID', 0);
                             resolve();
                         } else {
@@ -163,11 +170,40 @@ let store = new Vuex.Store({
 });
 
 const routes = [
-    {path: '/home', name: 'home', component: Home},
-    {path: '/statistic', name: 'statistic', component: Statistic}
+    {
+        path: '/home',
+        name: 'home',
+        component: Home,
+        meta: {
+            title: '主页'
+        }
+    },
+    {
+        path: '/statistic',
+        name: 'statistic',
+        component: Statistic,
+        meta: {
+            title: '统计'
+        }
+    },
+    {
+        path: '/settings',
+        name: 'settings',
+        component: Settings,
+        meta: {
+            title: '设置'
+        }
+    }
 ];
 
 const router = new VueRouter({routes});
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.title){
+        document.title = to.meta.title + " - " + store.state.username;
+    }
+    next();
+})
 
 new Vue({
     render: h => h(Main),

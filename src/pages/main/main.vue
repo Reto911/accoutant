@@ -39,9 +39,17 @@ export default {
   computed: {},
   watch: {},
   mounted() {
-    this.$store.dispatch('getUsername');
+    this.$store.dispatch('getUsername')
+    .then(() => {
+      this.$router.replace('/home');
+    })
+    .catch(err => {
+      if (err) {
+        console.log(err);
+        this.serverError = true;
+      }
+    })
     this.refresh();
-    this.$router.replace('/home');
   },
   methods: {
     logout() {  // 登出

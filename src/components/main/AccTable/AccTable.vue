@@ -7,11 +7,7 @@
     >
       <!--      标题栏-->
       <md-table-toolbar>
-        <div class="md-toolbar-section-start">
-          <h1 class="md-title">
-            {{ username }}
-          </h1>
-        </div>
+        <div class="md-toolbar-section-start" />
         <div class="md-toolbar-section-end">
           <md-button
             class="md-icon-button"

@@ -50,6 +50,7 @@
               v-model.number="form.balance"
               required
               type="number"
+              @keyup.enter="submit"
             />
           </md-field>
         </div>
@@ -59,6 +60,7 @@
             <md-textarea
               v-model.trim="form.desc"
               md-autogrow
+              @keyup.enter="submit"
             />
           </md-field>
         </div>

@@ -412,4 +412,6 @@ app.route('/debug')
         res.sendFile(__dirname + '/dist' + '/debug.html')
     })
 
-app.listen(port);
+app.listen(port, () => {
+    console.log("The server has listened at http://localhost:"+port);
+});
