@@ -80,6 +80,12 @@
           {{ item.date }}
         </md-table-cell>
         <md-table-cell
+          md-label="类型"
+          md-sort-by="type"
+        >
+          {{ item.type }}
+        </md-table-cell>
+        <md-table-cell
           md-label="描述"
         >
           {{ item.usage }}
