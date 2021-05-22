@@ -59,9 +59,6 @@
               <md-option value="医疗">
                 医疗
               </md-option>
-              <md-option value="交通">
-                交通
-              </md-option>
               <md-option value="其他">
                 其他
               </md-option>
