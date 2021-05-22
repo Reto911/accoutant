@@ -11,6 +11,10 @@
       md-cancel-text="取消"
       @md-confirm="deleteItem"
     />
+    <md-dialog-alert
+      :md-active.sync="formRequired"
+      md-content="还有未填写的字段！"
+    />
     <div class="md-layout-item md-size-50">
       <div
         class="md-layout md-alignment-center-center md-gutter"
@@ -33,7 +37,44 @@
             <label>日期</label>
           </md-datepicker>
         </div>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-50">
+          <md-field>
+            <label>类别</label>
+            <md-select
+              v-model="form.type"
+              :disabled="form.balance > 0"
+            >
+              <md-option value="餐饮">
+                餐饮
+              </md-option>
+              <md-option value="生活">
+                生活
+              </md-option>
+              <md-option value="学习">
+                学习
+              </md-option>
+              <md-option value="娱乐">
+                娱乐
+              </md-option>
+              <md-option value="医疗">
+                医疗
+              </md-option>
+              <md-option value="交通">
+                交通
+              </md-option>
+              <md-option value="其他">
+                其他
+              </md-option>
+              <md-option
+                value="收入"
+                disabled
+              >
+                收入
+              </md-option>
+            </md-select>
+          </md-field>
+        </div>
+        <div class="md-layout-item md-size-50">
           <md-field>
             <label>描述</label>
             <md-input
@@ -112,18 +153,31 @@ export default {
   data()  {
     return {
       deleteDialog: false,
+      formRequired: false
     }
   },
   computed: {
+  },
+  watch: {
+    'form.balance': function (n, o){
+      if (n > 0) {
+        this.form.type = '收入';
+        return;
+      }
+      if (n <= 0 && o > 0) {
+        this.form.type = null;
+      }
+    }
   },
   methods: {
     clear() {
       this.$emit('clear');
     },
     submit() {
-      if (this.form.date && this.form.usage && this.form.balance) {
+      if (this.form.date && this.form.type && this.form.usage && this.form.balance) {
         this.$emit('submit', this.form);
-        // this.$emit('clear');
+      } else {
+        this.formRequired = true;
       }
     },
     deleteItem() {

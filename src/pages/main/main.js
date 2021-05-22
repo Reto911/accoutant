@@ -198,11 +198,10 @@ const routes = [
 
 const router = new VueRouter({routes});
 
-router.beforeEach((to, from, next) => {
+router.afterEach((to, from) => {
     if (to.meta.title){
-        document.title = to.meta.title + " - " + store.state.username;
+        document.title = to.meta.title;
     }
-    next();
 })
 
 new Vue({
