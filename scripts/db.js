@@ -1,6 +1,5 @@
 const sqlite3 = require('sqlite3');
 
-//TODO: 对日期和类目的统计查询
 
 // 用户初始化
 function init(dbPath, username, force, callback) {
@@ -101,3 +100,40 @@ function getLastId(dbPath, username, callback){
 }
 
 exports.getLastId = getLastId;
+
+// 按日统计收支
+function balanceByDate(dbPath, username, callback) {
+    let db = new sqlite3.Database(dbPath);
+    db.all(`SELECT date, round(SUM(balance), 2) FROM ${username} GROUP BY date`, (err, rows) => {
+        callback(err, rows);
+    }).close();
+}
+
+exports.balanceByDate = balanceByDate;
+
+// 按日统计收入
+function incomeByDate(dbPath, username, callback) {
+    let db = new sqlite3.Database(dbPath);
+    db.all(`SELECT date, round(SUM(balance), 2) FROM ${username} WHERE balance>0 GROUP BY date`, (err, rows) => {
+        callback(err, rows);
+    }).close();
+}
+exports.incomeByDate = incomeByDate;
+
+// 按日统计支出
+function outcomeByDate(dbPath, username, callback) {
+    let db = new sqlite3.Database(dbPath);
+    db.all(`SELECT date, round(ABS(SUM(balance)), 2) FROM ${username} WHERE balance<=0 GROUP BY date`, (err, rows) => {
+        callback(err, rows);
+    }).close();
+}
+exports.outcomeByDate = outcomeByDate;
+
+// 按类目统计支出
+function outcomeByType(dbPath, username, callback) {
+    let db = new sqlite3.Database(dbPath);
+    db.all(`SELECT type, round(ABS(SUM(balance)), 2) FROM ${username} WHERE balance<=0 GROUP BY type`, (err, rows) => {
+        callback(err, rows);
+    }).close();
+}
+exports.outcomeByType = outcomeByType;

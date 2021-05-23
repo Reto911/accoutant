@@ -33,6 +33,10 @@ const min = (a, b) => (a < b) ? a : b;
 let store = new Vuex.Store({
     state: {
         data: [],  // 账目数据
+        balanceByDate: [['date'], ['balance']],
+        outcomeByDate: [['date'], ['outcome']],
+        incomeByDate: [['date'], ['income']],
+        outcomeByType: [['type'], ['outcome']],
         username: "Unknown",  // 用于显示的用户名
         tableInitialized: false,  // 表格初始化？,
         lastID: 0
@@ -68,7 +72,35 @@ let store = new Vuex.Store({
         },
         setLastID(s, id) {
             s.lastID = id;
-        }
+        },
+        setBalanceByDate(s, items) {
+            s.balanceByDate = [['date'], ['balance']];
+            for (let i of items) {
+                s.balanceByDate[0].push(i['date']);
+                s.balanceByDate[1].push(i['round(SUM(balance), 2)']);
+            }
+        },
+        setOutcomeByDate(s, items) {
+            s.outcomeByDate = [['date'], ['outcome']]
+            for (let i of items) {
+                s.outcomeByDate[0].push(i['date']);
+                s.outcomeByDate[1].push(i['round(ABS(SUM(balance)), 2)']);
+            }
+        },
+        setIncomeByDate(s, items) {
+            s.incomeByDate = [['date'], ['income']];
+            for (let i of items) {
+                s.incomeByDate[0].push(i['date']);
+                s.incomeByDate[1].push(i['round(SUM(balance), 2)']);
+            }
+        },
+        setOutcomeByType(s, items) {
+            s.outcomeByType = [['type'], ['outcome']];
+            for (let i of items) {
+                s.outcomeByType[0].push(i['type']);
+                s.outcomeByType[1].push(i['round(ABS(SUM(balance)), 2)']);
+            }
+        },
     },
     actions: {
         refresh({commit}) {  // 刷新数据
@@ -78,6 +110,38 @@ let store = new Vuex.Store({
                 .then(res => {
                     commit('setData', res.data);
                     commit('setTableInitialized', true);
+                })
+                .catch(err => {
+                    console.error(err);
+                    console.log("Server Error");
+                })
+            axios.get('/db/select/balanceByDate')
+                .then(res => {
+                    commit('setBalanceByDate', res.data);
+                })
+                .catch(err => {
+                    console.error(err);
+                    console.log("Server Error");
+                })
+            axios.get('/db/select/incomeByDate')
+                .then(res => {
+                    commit('setIncomeByDate', res.data);
+                })
+                .catch(err => {
+                    console.error(err);
+                    console.log("Server Error");
+                })
+            axios.get('/db/select/outcomeByDate')
+                .then(res => {
+                    commit('setOutcomeByDate', res.data);
+                })
+                .catch(err => {
+                    console.error(err);
+                    console.log("Server Error");
+                })
+            axios.get('/db/select/outcomeByType')
+                .then(res => {
+                    commit('setOutcomeByType', res.data);
                 })
                 .catch(err => {
                     console.error(err);
@@ -165,7 +229,7 @@ let store = new Vuex.Store({
                     reject(err);
                 });
             })
-        }
+        },
     }
 });
 

@@ -85,6 +85,74 @@ app.route('/db/select')
             })
         })
     });
+// 按日收支
+app.route('/db/select/balanceByDate')
+    .get((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.balanceByDate(dbPath, username, (err, rows) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).json(rows);
+            })
+        })
+    });
+// 按日收入
+app.route('/db/select/incomeByDate')
+    .get((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.incomeByDate(dbPath, username, (err, rows) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).json(rows);
+            })
+        })
+    });
+// 按日支出
+app.route('/db/select/outcomeByDate')
+    .get((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.outcomeByDate(dbPath, username, (err, rows) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).json(rows);
+            })
+        })
+    });
+// 按类支出
+app.route('/db/select/outcomeByType')
+    .get((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                return err ? console.error(err) : null;
+            }
+            db.outcomeByType(dbPath, username, (err, rows) => {
+                if (err) {
+                    res.status(404).end();
+                    return console.error(err);
+                }
+                res.status(200).json(rows);
+            })
+        })
+    });
 // 数据库写入
 app.route('/db/insert')
     .post((req, res) => {
