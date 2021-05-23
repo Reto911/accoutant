@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-size-50">
+    <div class="md-layout-item md-size-40">
       <slot
         :rows="rows"
         :currentPage="currentPage"
@@ -25,14 +25,14 @@
         </md-select>
       </md-field>
     </div>
-    <div class="md-layout-item md-size-15">
+    <div class="md-layout-item md-size-20">
       <span
         class="material-gray align-center"
       >
         {{ firstRow }}-{{ lastRow }} of {{ total }}
       </span>
     </div>
-    <div class="md-layout-item md-size-20">
+    <div class="md-layout-item md-size-25">
       <md-button
         :disabled="currentPage<=0"
         class="md-icon-button align-center"
