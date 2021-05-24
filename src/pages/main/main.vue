@@ -10,12 +10,10 @@
       md-title="错误"
     />
     <transition name="fade">
-      <keep-alive>
-        <router-view
-          @refresh="refresh"
-          @server-err="serverError = true"
-        />
-      </keep-alive>
+      <router-view
+        @refresh="refresh"
+        @server-err="serverError = true"
+      />
     </transition>
   </div>
 </template>

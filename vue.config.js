@@ -2,6 +2,13 @@
 
 module.exports = {
   publicPath: '/static/',
+
+  // configureWebpack: {
+  //   output: {
+  //     libraryExport: 'default'
+  //   },
+  // devtool: 'nosources-source-map'
+  // }
   pages: {
     main: {
       entry: 'src/pages/main/main.js',
@@ -38,11 +45,7 @@ module.exports = {
       title: 'Debug',
       chunks: ['chunk-vendors', 'chunk-common', 'debug']
     },
-  }
-  // configureWebpack: {
-  //   output: {
-  //     libraryExport: 'default'
-  //   },
-    // devtool: 'nosources-source-map'
-  // }
+  },
+
+  productionSourceMap: false
 }

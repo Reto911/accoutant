@@ -132,8 +132,17 @@ exports.outcomeByDate = outcomeByDate;
 // 按类目统计支出
 function outcomeByType(dbPath, username, callback) {
     let db = new sqlite3.Database(dbPath);
-    db.all(`SELECT type, round(ABS(SUM(balance)), 2) FROM ${username} WHERE balance<=0 GROUP BY type`, (err, rows) => {
+    db.all(`SELECT type, round(ABS(SUM(balance)), 2) FROM ${username} WHERE type!='收入' GROUP BY type`, (err, rows) => {
         callback(err, rows);
     }).close();
 }
 exports.outcomeByType = outcomeByType;
+
+// 按类目统计每日支出
+function outcomeByTypeByDay(dbPath, username, callback) {
+    let db = new sqlite3.Database(dbPath);
+    db.all(`SELECT date, type, ABS(round(SUM(balance), 2)) FROM ${username} WHERE type!='收入' GROUP BY date, type`, (err, rows)=> {
+        callback(err, rows);
+    }).close();
+}
+exports.outcomeByTypeByDay = outcomeByTypeByDay;

@@ -33,10 +33,11 @@ const min = (a, b) => (a < b) ? a : b;
 let store = new Vuex.Store({
     state: {
         data: [],  // 账目数据
-        balanceByDate: [['date'], ['balance']],
-        outcomeByDate: [['date'], ['outcome']],
-        incomeByDate: [['date'], ['income']],
-        outcomeByType: [['type'], ['outcome']],
+        balanceByDate: [[], []],
+        outcomeByDate: [[], []],
+        incomeByDate: [[], []],
+        outcomeByType: [[], []],
+        outcomeByTypeByDay: [['Date', '餐饮', '生活', '学习', '娱乐', '医疗', '其他']],
         username: "Unknown",  // 用于显示的用户名
         tableInitialized: false,  // 表格初始化？,
         lastID: 0
@@ -74,33 +75,68 @@ let store = new Vuex.Store({
             s.lastID = id;
         },
         setBalanceByDate(s, items) {
-            s.balanceByDate = [['date'], ['balance']];
+            s.balanceByDate = [[], []];
             for (let i of items) {
                 s.balanceByDate[0].push(i['date']);
                 s.balanceByDate[1].push(i['round(SUM(balance), 2)']);
             }
         },
         setOutcomeByDate(s, items) {
-            s.outcomeByDate = [['date'], ['outcome']]
+            s.outcomeByDate = [[], []]
             for (let i of items) {
                 s.outcomeByDate[0].push(i['date']);
                 s.outcomeByDate[1].push(i['round(ABS(SUM(balance)), 2)']);
             }
         },
         setIncomeByDate(s, items) {
-            s.incomeByDate = [['date'], ['income']];
+            s.incomeByDate = [[], []];
             for (let i of items) {
                 s.incomeByDate[0].push(i['date']);
                 s.incomeByDate[1].push(i['round(SUM(balance), 2)']);
             }
         },
         setOutcomeByType(s, items) {
-            s.outcomeByType = [['type'], ['outcome']];
+            s.outcomeByType = [[], []];
             for (let i of items) {
                 s.outcomeByType[0].push(i['type']);
                 s.outcomeByType[1].push(i['round(ABS(SUM(balance)), 2)']);
             }
         },
+        setOutcomeByTypeByDay(s, items) {
+            s.outcomeByTypeByDay = [['Date', '餐饮', '生活', '学习', '娱乐', '医疗', '其他']];
+            let lastDate = items[0].date;
+            let row = [lastDate, 0, 0, 0, 0, 0, 0];
+            for (let i of items) {
+                if (i.date !== lastDate) {
+                    s.outcomeByTypeByDay.push(row);
+                    lastDate = i.date;
+                    row = [lastDate, 0, 0, 0, 0, 0, 0];
+                }
+                switch (i.type) {
+                    case '餐饮':
+                        row[1] = i["ABS(round(SUM(balance), 2))"];
+                        break;
+                    case '生活':
+                        row[2] = i["ABS(round(SUM(balance), 2))"];
+                        break;
+                    case '学习':
+                        row[3] = i["ABS(round(SUM(balance), 2))"];
+                        break;
+                    case '娱乐':
+                        row[4] = i["ABS(round(SUM(balance), 2))"];
+                        break;
+                    case '医疗':
+                        row[5] = i["ABS(round(SUM(balance), 2))"];
+                        break;
+                    case '其他':
+                        row[6] = i["ABS(round(SUM(balance), 2))"];
+                        break;
+                }
+            }
+            if (lastDate === items[0].date) {
+                s.outcomeByTypeByDay.push(row);
+            }
+        }
     },
     actions: {
         refresh({commit}) {  // 刷新数据
@@ -142,6 +178,14 @@ let store = new Vuex.Store({
             axios.get('/db/select/outcomeByType')
                 .then(res => {
                     commit('setOutcomeByType', res.data);
+                })
+                .catch(err => {
+                    console.error(err);
+                    console.log("Server Error");
+                })
+            axios.get('/db/select/outcomeByTypeByDay')
+                .then(res => {
+                    commit('setOutcomeByTypeByDay', res.data);
                 })
                 .catch(err => {
                     console.error(err);
@@ -263,7 +307,7 @@ const routes = [
 const router = new VueRouter({routes});
 
 router.afterEach((to, from) => {
-    if (to.meta.title){
+    if (to.meta.title) {
         document.title = to.meta.title;
     }
 })

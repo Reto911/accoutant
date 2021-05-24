@@ -9,6 +9,7 @@
     "build-dev": "vue-cli-service build --mode development"
   },
   "dependencies": {
+    "@vue/composition-api": "*",
     "animate.css": "^4.1.1",
     "aws-sdk": "^2.884.0",
     "axios": "^0.21.1",
@@ -20,7 +21,7 @@
     "csv": "^5.5.0",
     "csv-stringify": "^5.6.2",
     "date-fns": "^2.21.1",
-    "echarts": "^5.0.2",
+    "echarts": "^5.1.1",
     "express": "^4.17.1",
     "hash.js": "^1.1.7",
     "materialize-css": "^1.0.0",
@@ -31,7 +32,7 @@
     "sqlite3": "^5.0.2",
     "svg-captcha": "^1.4.0",
     "vue": "^2.6.11",
-    "vue-echarts": "*",
+    "vue-echarts": "^6.0.0-rc.5",
     "vue-loader": "^15.9.6",
     "vue-material": "*",
     "vue-router": "^3.2.0",
@@ -42,12 +43,9 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "^4.1.1",
-    "@vue/composition-api": "*",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.32.10",
-    "sass-loader": "^7.2.0",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.46.0",
     "webpack-cli": "^4.6.0"
