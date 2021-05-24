@@ -51,7 +51,7 @@ app.route('/')
                     res.status(303).location('/users/login').end();
                     return;
                 }
-                console.log(username + "'ve logged in!");
+                // console.log(username + "'ve logged in!");
                 db.init(dbPath, username, false, err => {
                     if(err && err !== 'Existed') console.log(err);
                 })
@@ -153,6 +153,23 @@ app.route('/db/select/outcomeByType')
             })
         })
     });
+// 按类按日支出
+app.route('/db/select/outcomeByTypeByDay')
+    .get((req, res) => {
+    users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+        if (err || !username) {
+            res.status(404).end();
+            return err ? console.error(err) : null;
+        }
+        db.outcomeByTypeByDay(dbPath, username, (err, rows) => {
+            if (err) {
+                res.status(404).end();
+                return console.error(err);
+            }
+            res.status(200).json(rows);
+        })
+    })
+});
 // 数据库写入
 app.route('/db/insert')
     .post((req, res) => {
