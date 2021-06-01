@@ -12,16 +12,19 @@
         </div>
         <div class="md-toolbar-section-end">
           <md-button
+            v-if="username !== 'root'"
             to="/home"
           >
             主页
           </md-button>
           <md-button
+            v-if="username !== 'root'"
             to="/statistic"
           >
             统计
           </md-button>
           <md-button
+            v-if="username !== 'root'"
             to="/settings"
           >
             设置

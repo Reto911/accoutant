@@ -124,6 +124,10 @@ export default {
               this.tip = "未知错误！";
             }
           })
+      .catch(err => {
+        this.error = true;
+        this.tip = "服务器错误！";
+      })
     }
   }
 }

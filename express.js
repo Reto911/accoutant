@@ -448,11 +448,72 @@ app.route("/users/name")
         })
     })
 
+// 删除用户
+app.route("/users/drop")
+    .post((req, res)=>{
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                console.log(err);
+            } else {
+                users.getUser(dbPath, username, (err, row) => {
+                    if (err || !row) {
+                        res.status(404).end();
+                        console.log(err);
+                    } else {
+                        if (row.password !== req.body.password) {
+                            res.status(403).end();
+                        } else {
+                            users.dropUser(dbPath, username, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                    res.status(404).end();
+                                }else {
+                                    res.status(200).end();
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    })
+
+app.route("/users/change")
+    .post((req, res)=>{
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                console.log(err);
+            } else {
+                users.getUser(dbPath, username, (err, row) => {
+                    if (err || !row) {
+                        res.status(404).end();
+                        console.log(err);
+                    } else {
+                        if (row.password !== req.body.origin) {
+                            res.status(403).end();
+                        } else {
+                            users.changePassword(dbPath, username, req.body.nPwd, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                    res.status(404).end();
+                                }else {
+                                    res.status(200).end();
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    })
+
 // 背景图片缓存
 app.route('/bgimg')
     .get((req, res) => {
         res.type("text/plain")
-        request("http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", (err, response, body) => {
+        request("https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", (err, response, body) => {
             if (!err) {
                 try {
                     let imgUrl = new URL("https://cn.bing.com" + JSON.parse(body).images[0].url);
