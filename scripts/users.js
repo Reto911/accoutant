@@ -76,11 +76,13 @@ function keyClean(dbPath, callback) {
 
 exports.keyClean = keyClean;
 
-function keyDisable(dbPath, key, callback){
+function keyDisable(dbPath, key, callback) {
     /* 使密钥失效, 只支持传入密钥
     * callback(err) */
     let db = new sqlite3.Database(dbPath);
-    db.run('UPDATE keys SET valuable=0 WHERE user_key=? AND valuable=1 AND long_term=0', [key], err => {callback(err)}).close();
+    db.run('UPDATE keys SET valuable=0 WHERE user_key=? AND valuable=1 AND long_term=0', [key], err => {
+        callback(err)
+    }).close();
 }
 
 exports.keyDisable = keyDisable;
@@ -128,6 +130,7 @@ function changePassword(dbPath, username, nPwd, callback) {
 
 exports.changePassword = changePassword;
 
+//
 function getUser(dbPath, username, callback) {
     /* 获取用户信息
     *  callback(err, row) */
@@ -137,3 +140,20 @@ function getUser(dbPath, username, callback) {
 }
 
 exports.getUser = getUser;
+
+function dropUser(dbPath, username, callback) {
+    let db = new sqlite3.Database(dbPath);
+    db.run(`DROP TABLE ${username}`, [], (err) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+        db.run("DELETE FROM users WHERE username=?", [username], err => callback(err));
+    })
+        .run("DELETE FROM keys WHERE username=?", [username], (err) => {
+            if (err) console.log(err)
+        })
+        .close();
+}
+
+exports.dropUser = dropUser;
