@@ -1,34 +1,38 @@
 <template>
-  <div class="md-layout md-alignment-top-center md-gutter">
-    <div class="md-layout-item md-size-50">
-      <v-chart
-        :option="bbdOption"
-        class="chart"
-      />
+  <div>
+    <div class="md-layout md-alignment-top-center">
+      <div class="md-layout-item md-size-50">
+        <v-chart
+          :option="obtOption"
+          class="chart"
+        />
+      </div>
     </div>
-    <div class="md-layout-item md-size-50">
-      <v-chart
-        :option="ibdOption"
-        class="chart"
-      />
-    </div>
-    <div class="md-layout-item md-size-50">
-      <v-chart
-        :option="obdOption"
-        class="chart"
-      />
-    </div>
-    <div class="md-layout-item md-size-50">
-      <v-chart
-        :option="obtdOption"
-        class="chart"
-      />
-    </div>
-    <div class="md-layout-item md-size-50">
-      <v-chart
-        :option="obtOption"
-        class="chart"
-      />
+    <div class="md-layout md-alignment-top-center md-gutter">
+      <div class="md-layout-item md-size-50">
+        <v-chart
+          :option="bbdOption"
+          class="chart"
+        />
+      </div>
+      <div class="md-layout-item md-size-50">
+        <v-chart
+          :option="ibdOption"
+          class="chart"
+        />
+      </div>
+      <div class="md-layout-item md-size-50">
+        <v-chart
+          :option="obdOption"
+          class="chart"
+        />
+      </div>
+      <div class="md-layout-item md-size-50">
+        <v-chart
+          :option="obtdOption"
+          class="chart"
+        />
+      </div>
     </div>
   </div>
 </template>
