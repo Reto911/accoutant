@@ -34,7 +34,8 @@ app.get('/favicon.ico', (req, res) => {
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
-app.use(compression());
+app.use(compression());  // gzip压缩模块
+
 // 静态资源
 app.use('/static', express.static('dist/'))
 
@@ -479,6 +480,7 @@ app.route("/users/drop")
         })
     })
 
+// 修改用户密码
 app.route("/users/change")
     .post((req, res)=>{
         users.keyCheck(dbPath, req.cookies.key, (err, username) => {
@@ -503,6 +505,72 @@ app.route("/users/change")
                                 }
                             })
                         }
+                    }
+                })
+            }
+        })
+    })
+
+// 列出用户(root专用)
+app.route("/users/list")
+    .get((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                console.log(err);
+            } else if (username !== 'root') {
+            res.status(403).end()
+            } else {
+                users.listUsers(dbPath, (err, rows) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(404).end();
+                    } else {
+                        res.json(rows);
+                    }
+                })
+            }
+        })
+    })
+
+// 删除用户(root专用)
+app.route("/users/drop/root")
+    .post((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                console.log(err);
+            } else if (username !== 'root') {
+                res.status(403).end()
+            } else {
+                users.dropUser(dbPath, req.body.username, (err) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(404).end();
+                    } else {
+                        res.status(200).end();
+                    }
+                })
+            }
+        })
+    })
+
+// 修改密码(root专用)
+app.route("/users/change/root")
+    .post((req, res) => {
+        users.keyCheck(dbPath, req.cookies.key, (err, username) => {
+            if (err || !username) {
+                res.status(404).end();
+                console.log(err);
+            } else if (username !== 'root') {
+                res.status(403).end()
+            } else {
+                users.changePassword(dbPath, req.body.username, req.body.password, (err) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(404).end();
+                    } else {
+                        res.status(200).end();
                     }
                 })
             }

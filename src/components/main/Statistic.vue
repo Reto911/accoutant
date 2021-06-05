@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="transform: translateY(20px);">
     <div class="md-layout md-alignment-top-center">
       <div class="md-layout-item md-size-50">
         <v-chart
