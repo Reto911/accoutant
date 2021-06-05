@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3');
 // const md5 = require('js-md5');
+let {init} = require('./db')
 const hash = require('hash.js');
 
 // console.log(hash.sha256().update("root").digest("hex"));
@@ -115,6 +116,9 @@ function register(dbPath, info, callback) {
         [username, password, now, birthday, val_q, val_a], err => {
             callback(err);
         }).close();
+    init(dbPath, username, false, (err) => {
+        if (err) console.log(err);
+    })
 }
 
 exports.register = register;
@@ -141,6 +145,7 @@ function getUser(dbPath, username, callback) {
 
 exports.getUser = getUser;
 
+// 删除用户
 function dropUser(dbPath, username, callback) {
     let db = new sqlite3.Database(dbPath);
     db.run(`DROP TABLE ${username}`, [], (err) => {
@@ -157,3 +162,18 @@ function dropUser(dbPath, username, callback) {
 }
 
 exports.dropUser = dropUser;
+
+// 列出用户(root专用)
+function  listUsers(dbPath, callback){
+    let db = new sqlite3.Database(dbPath);
+    db.all(`
+        SELECT id, username, password, datetime(reg_time, 'unixepoch', 'localtime') AS RegTime, seq
+        FROM users
+        LEFT OUTER JOIN sqlite_sequence AS ss
+        ON users.username = ss.name;
+    `, (err, rows) => {
+        callback(err, rows);
+    })
+}
+
+exports.listUsers = listUsers;

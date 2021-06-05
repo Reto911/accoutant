@@ -1,4 +1,5 @@
-import Vue from 'vue'
+import Vue from 'vue';
+import VueRouter from "vue-router";
 import Main from './main.vue'
 import VueMaterial from 'vue-material';
 import Vuex from 'vuex';
@@ -8,10 +9,11 @@ import 'vue-material/dist/theme/default.css';
 // import '@/css/theme.scss';
 import '../../css/icon.css'
 
-import VueRouter from "vue-router";
+
 import Home from "@/components/main/Home";
 import Statistic from "@/components/main/Statistic";
 import Settings from "@/components/main/Settings";
+import Root from "@/components/main/Root";
 
 
 Vue.use(VueMaterial);
@@ -301,10 +303,51 @@ const routes = [
         meta: {
             title: '设置'
         }
-    }
+    },
+    {
+        path: '/root',
+        name: 'root',
+        component: Root,
+        meta: {
+            title: '后台'
+        }
+    },
 ];
 
 const router = new VueRouter({routes});
+
+router.beforeEach((to, from, next) => {
+    store.dispatch('getUsername')
+        .then(()=>{
+            if (store.state.username === 'root' && to.name !== 'root')  // root用户只能访问root页面
+            {
+                next({name: 'root'});
+            }
+            else if (store.state.username !== 'root' && to.name === 'root')  // 非root用户禁止访问root页面
+            {
+                store.dispatch('refresh')
+                    .then(() => {
+                        next({name: 'home'});
+                    })
+            }
+            else
+            {
+                if (store.state.username !== 'root') {
+                    store.dispatch('refresh')
+                        .then(() => {
+                            next();
+                        })
+                } else {
+                    next();
+                }
+            }
+        })
+        .catch(err => {
+            if (err) {
+                console.log(err);
+            }
+        })
+})
 
 router.afterEach((to, from) => {
     if (to.meta.title) {

@@ -156,15 +156,7 @@ export default {
   computed: {
   },
   watch: {
-    'form.balance': function (n, o){
-      if (n > 0) {
-        this.form.type = '收入';
-        return;
-      }
-      if (n <= 0 && o > 0) {
-        this.form.type = null;
-      }
-    }
+
   },
   methods: {
     clear() {
@@ -172,6 +164,7 @@ export default {
     },
     submit() {
       if (this.form.date && this.form.type && this.form.usage && this.form.balance) {
+        if (this.form.balance > 0) this.form.type = '收入';
         this.$emit('submit', this.form);
       } else {
         this.formRequired = true;

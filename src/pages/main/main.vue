@@ -34,20 +34,14 @@ export default {
       serverError: false
     }
   },
-  computed: {},
+  computed: {
+    username(){
+      return this.$store.state.username;
+    }
+  },
   watch: {},
   mounted() {
-    this.$store.dispatch('getUsername')
-    .then(() => {
-      this.$router.replace('/home');
-    })
-    .catch(err => {
-      if (err) {
-        console.log(err);
-        this.serverError = true;
-      }
-    })
-    this.refresh();
+    this.$router.replace('/home');
   },
   methods: {
     logout() {  // 登出

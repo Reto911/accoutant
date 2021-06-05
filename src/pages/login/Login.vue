@@ -23,7 +23,7 @@ export default {
   beforeCreate() {
     axios.get("/bgimg")
     .then(res => {
-      console.log(res.data);
+      // console.log(res.data);
       this.img = res.data;
     })
     .catch(err => {
