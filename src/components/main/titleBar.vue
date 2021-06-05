@@ -15,22 +15,22 @@
             v-if="username !== 'root'"
             to="/home"
           >
-            主页
+            <md-icon>home</md-icon>主页
           </md-button>
           <md-button
             v-if="username !== 'root'"
             to="/statistic"
           >
-            统计
+            <md-icon>leaderboard</md-icon>统计
           </md-button>
           <md-button
             v-if="username !== 'root'"
             to="/settings"
           >
-            设置
+            <md-icon>settings</md-icon>设置
           </md-button>
           <md-button @click="$emit('logout')">
-            退出
+            <md-icon>logout</md-icon>退出
           </md-button>
         </div>
       </div>
