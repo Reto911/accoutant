@@ -38,14 +38,14 @@ function keyGen(dbPath, username, callback) {
     const key = hash.sha256().update(username + now).digest('hex');
     let db = new sqlite3.Database(dbPath);
     db.serialize()
-        .run("UPDATE keys SET valuable=0 WHERE username=? AND valuable=1 AND long_term=0", [username])  // 保证只有一个密钥生效
+    db.run("UPDATE keys SET valuable=0 WHERE username=? AND valuable=1 AND long_term=0", [username])  // 保证只有一个密钥生效
         .run("INSERT INTO keys (username, user_key, gen_time) VALUES (?, ?, ?)",
             [username, key, parseInt(now / 1000)],
             (err) => {
                 callback(err, key);
             })
         .parallelize()
-        .close();
+    db.close();
 }
 
 exports.keyGen = keyGen;
@@ -164,13 +164,13 @@ function dropUser(dbPath, username, callback) {
 exports.dropUser = dropUser;
 
 // 列出用户(root专用)
-function  listUsers(dbPath, callback){
+function listUsers(dbPath, callback) {
     let db = new sqlite3.Database(dbPath);
     db.all(`
         SELECT id, username, password, datetime(reg_time, 'unixepoch', 'localtime') AS RegTime, seq
         FROM users
-        LEFT OUTER JOIN sqlite_sequence AS ss
-        ON users.username = ss.name;
+                 LEFT OUTER JOIN sqlite_sequence AS ss
+                                 ON users.username = ss.name;
     `, (err, rows) => {
         callback(err, rows);
     })

@@ -404,9 +404,6 @@ export default {
         "outcomeByType",
         "outcomeByTypeByDay"
     ])
-  },
-  mounted () {
-    // this.$emit('refresh');
   }
 }
 </script>

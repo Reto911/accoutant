@@ -3,12 +3,6 @@
     class="bgimg"
     :style="bg"
   >
-  <!--    <img-->
-  <!--      :src="img"-->
-  <!--      alt=""-->
-  <!--      height="100%"-->
-  <!--      width="100%"-->
-  <!--    >-->
   </div>
 </template>
 
@@ -39,7 +33,6 @@ export default {
 </script>
 
 <style scoped>
-/*@import '/node_modules/materialize-css/dist/css/materialize.css';*/
 .bgimg {
   width: 100%;
   height: 100%;
